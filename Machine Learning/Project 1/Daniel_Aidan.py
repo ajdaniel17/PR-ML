@@ -33,7 +33,11 @@ Data = []
 
 # Fill the array with the cars class
 for i in range(rows):
-    TempCar = car(ED.iat[i,0], ED.iat[i,1])
-    Data.append(TempCar)
-    #print(Data[i].getHorsePower())
+    if(pd.isna(ED.iloc[i,0]) or pd.isna(ED.iloc[i,1])):
+        print("Data Missing! Skipping row " , i + 2)
+    else:
+        TempCar = car(ED.iat[i,0], ED.iat[i,1])
+        Data.append(TempCar)
+        #print(Data[i].getHorsePower())
+        #print(Data[i].getWeight())
 
