@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # This class is for easy storage of our data, it contains ways to set the data and retrive it
 class car():
@@ -31,7 +31,7 @@ rows = len(index)
 #Initialize Empty List
 Data = []
 
-# Fill the array with the cars class
+# Fill the array with the cars class, skip points of data with missing parts
 for i in range(rows):
     if(pd.isna(ED.iloc[i,0]) or pd.isna(ED.iloc[i,1])):
         print("Data Missing! Skipping row " , i + 2)
@@ -41,3 +41,32 @@ for i in range(rows):
         #print(Data[i].getHorsePower())
         #print(Data[i].getWeight())
 
+
+#Code to do ML HERE
+
+
+
+
+
+
+#Plot First Figure : Closed Form
+plt.figure(1)
+for i in range(len(Data)):
+    plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
+
+
+plt.xlabel('Weight')
+plt.ylabel('Horsepower')
+plt.title("""Matlab's "carbig" dataset""")
+
+#Plot Second Figure : Gradient Descent
+plt.figure(2)
+for i in range(len(Data)):
+    plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
+
+
+plt.xlabel('Weight')
+plt.ylabel('Horsepower')
+plt.title("""Matlab's "carbig" dataset""")
+
+plt.show()
