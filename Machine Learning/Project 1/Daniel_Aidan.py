@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import random
+
 
 # This class is for easy storage of our data, it contains ways to set the data and retrive it
 class car():
