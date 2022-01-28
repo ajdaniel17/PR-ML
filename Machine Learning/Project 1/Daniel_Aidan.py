@@ -45,28 +45,37 @@ for i in range(rows):
 
 #Code to do ML HERE
 
-np.set_printoptions(threshold=np.inf)
+#Closd Form
+x = np.empty((0,1),int)
+for i in range(len(Data)):
+    x = np.append(x,np.array([[Data[i].getWeight()]]))
+#print(x)
+
 bigX = np.empty((0,2),int)
 for i in range(len(Data)):
     bigX = np.append(bigX,np.array([[Data[i].getWeight(),1]]),0)
 #print(bigX)
-#w = np.matmul(np.linalg.pinv(np.matmul(bigX.transpose(),bigX)),bigX.transpose())
-#print(w.shape)
-w = np.linalg.pinv(bigX)
+
 t = np.empty((0,1),int)
 for i in range(len(Data)):
     t = np.append(t,np.array([[Data[i].getHorsePower()]]))
-#print(t.shape)
+#print(t)
 
+w = np.linalg.pinv(bigX)
 W = np.matmul(w,t)
 #print(W)
 
 Y = np.matmul(bigX,W)
-print(Y.shape)
+#print(Y)
+
+#Gradient Descent
+
+
+
 #Plot First Figure : Closed Form
 plt.figure(1)
+plt.plot(x,Y,label = "Closed Form")
 
-plt.draw()
 for i in range(len(Data)):
     plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
 
@@ -74,7 +83,7 @@ for i in range(len(Data)):
 plt.xlabel('Weight')
 plt.ylabel('Horsepower')
 plt.title("""Matlab's "carbig" dataset""")
-
+leg = plt.legend(loc='upper right')
 #Plot Second Figure : Gradient Descent
 # plt.figure(2)
 # for i in range(len(Data)):
@@ -85,4 +94,6 @@ plt.title("""Matlab's "carbig" dataset""")
 # plt.ylabel('Horsepower')
 # plt.title("""Matlab's "carbig" dataset""")
 
+
+plt.draw()
 plt.show()
