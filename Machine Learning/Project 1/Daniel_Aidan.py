@@ -45,7 +45,7 @@ for i in range(rows):
 
 #Code to do ML HERE
 
-#Closd Form
+#Closed Form
 x = np.empty((0,1),int)
 for i in range(len(Data)):
     x = np.append(x,np.array([[Data[i].getWeight()]]))
@@ -84,15 +84,17 @@ plt.xlabel('Weight')
 plt.ylabel('Horsepower')
 plt.title("""Matlab's "carbig" dataset""")
 leg = plt.legend(loc='upper right')
+
+
 #Plot Second Figure : Gradient Descent
-# plt.figure(2)
-# for i in range(len(Data)):
-#     plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
+plt.figure(2)
+for i in range(len(Data)):
+    plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
 
 
-# plt.xlabel('Weight')
-# plt.ylabel('Horsepower')
-# plt.title("""Matlab's "carbig" dataset""")
+plt.xlabel('Weight')
+plt.ylabel('Horsepower')
+plt.title("""Matlab's "carbig" dataset""")
 
 
 plt.draw()
