@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import random
 
 # This class is for easy storage of our data, it contains ways to set the data and retrive it
 class car():
@@ -69,6 +69,21 @@ Y = np.matmul(bigX,W)
 #print(Y)
 
 #Gradient Descent
+
+W2 = np.empty((0,1),int)
+for i in range(len(Data)):
+    W2 = np.append(W2,np.array(random.randint(1,100)))
+#print(W2)
+
+L = .01
+JW = np.empty(len(Data),int)
+
+for i in range(1000):
+    for i in range(len(Data)):
+        JW[i] = pow(t[i]-W2[i],2)
+    
+
+
 
 
 
