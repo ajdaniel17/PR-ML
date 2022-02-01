@@ -75,13 +75,17 @@ for i in range(len(Data)):
     W2 = np.append(W2,np.array(random.randint(1,100)))
 #print(W2)
 
-L = .01
+L = .1
 JW = np.empty(len(Data),int)
 
-for i in range(1000):
+for i in range(500):
     for i in range(len(Data)):
         JW[i] = 2*W2[i]-2*t[i]
     
+    for i in range(len(Data)):
+        W2[i] = W2[i] - L * JW[i]
+
+print(W2.shape)
 
 
 
@@ -103,6 +107,7 @@ leg = plt.legend(loc='upper right')
 
 #Plot Second Figure : Gradient Descent
 plt.figure(2)
+plt.plot(x,W2,label = "Gradient Descent Form")
 for i in range(len(Data)):
     plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
 
