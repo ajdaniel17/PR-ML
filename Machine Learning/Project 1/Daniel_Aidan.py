@@ -80,7 +80,7 @@ JW = np.empty(len(Data),int)
 
 for i in range(1000):
     for i in range(len(Data)):
-        JW[i] = pow(t[i]-W2[i],2)
+        JW[i] = 2*W2[i]-2*t[i]
     
 
 
