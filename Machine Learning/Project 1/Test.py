@@ -50,31 +50,38 @@ w = np.linalg.pinv(bigX)
 W = np.matmul(w,t)
 #print(W)
 
-W2 = np.empty((0,1),int)
-for i in range(len(bigX[0])):
-    W2 = np.append(W2,np.array(random.randint(1,100)))
+# W2 = np.empty((0,1),int)
+# for i in range(len(bigX[0])):
+#     W2 = np.append(W2,np.array(random.randint(1,100)))
 #print(W2.shape)
-
-
+W2 = [[4],[5]]
+basicx = np.linspace(3,5,100)
 L = .1
-JW = np.matmul(np.matmul(2*np.transpose(W2),np.transpose(bigX)),bigX) - (2 * np.matmul(np.transpose(t),bigX))
+#JW = np.matmul(np.matmul(2*np.transpose(W2),np.transpose(bigX)),bigX) - (2 * np.matmul(np.transpose(t),bigX))
+#print(JW)
+#print(W2)
+# print(bigX.shape)
+# print(W2)
+# print(t.shape)
+epoch = 0
+# if epoch < 3:
+#     for i in range(len(W2)):
+JW = np.matmul(bigX,  W2) - t
 print(JW)
-# epoch = 0
-# if epoch < 1000 or JW > .05:
-#     for i in range(len(Data)):
-#         JW = np.matmul(np.matmul(2*np.transpose(W),np.transpose(bigX)),bigX) - (2 * np.matmul(np.transpose(t),bigX))
-    
-#     for i in range(1,len(Data)+1):
-#         print(i)
-#         W2[i] = W2[i-1] - L * JW
+       # W2 = W2 - np.matmul(L*(1/len(t)),JW) 
 
+    #epoch = epoch + 1
 
+#print(W2)
+Y2 = W2[0]*basicx + W2[1]
 Y = np.matmul(bigX,W)
 #print(Y)
 #Plot First Figure : Closed Form
 plt.figure(1)
 plt.plot(x,Y)
+plt.plot(basicx,Y2,'r')
 
+#plt.plot(W2[0],W2[1],color = "red")
 for i in range(len(Data)):
     plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
 
