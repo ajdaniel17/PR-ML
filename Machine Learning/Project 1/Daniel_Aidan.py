@@ -56,45 +56,66 @@ for i in range(len(Data)):
     bigX = np.append(bigX,np.array([[Data[i].getWeight(),1]]),0)
 #print(bigX)
 
+bigXnorm = np.empty((0,2),float)
+xmin = np.amin(x)
+xmax = np.amax(x)
+for i in range(len(bigX)):
+    bigXnorm = np.append(bigXnorm,np.array([[(float(x[i]-xmin))/(xmax-xmin),1]]),0)
+#print(bigXnorm)
+
 t = np.empty((0,1),float)
 for i in range(len(Data)):
     t = np.append(t,np.array([[Data[i].getHorsePower()]]))
 #print(t)
 
+tnorm = np.empty((0,1),float)
+tmin = np.amin(t)
+tmax = np.amax(t)
+for i in range(len(t)):
+    temp = float(t[i] - tmin)/(tmax-tmin)
+    tnorm = np.append(tnorm,np.array([[temp]]))
+#print(tnorm)
+
 w = np.linalg.pinv(bigX)
 W = np.matmul(w,t)
-#print(W)
-print(W)
+
 Y = np.matmul(bigX,W)
-#print(Y)
+
 
 #Gradient Descent
 
-# W2 = np.empty((0,1),float)
-# for i in range(len(bigX[0])):
-#     W2 = np.append(W2,np.array(random.randint(1,100)))
-# print(W2.shape)
-W2 = [[4],[5]]
+W2 = np.empty((0,1),float)
+for i in range(len(bigX[0])):
+    W2 = np.append(W2,np.array(random.randint(1,100)))
+#print(W2)    
 
-L = .0000001
+# W2 = [[1],[-13]]
 
-for i in range(15000):
+L = .1
 
-    JW = np.matmul(bigX,  W2)
+for i in range(10000):
+
+    JW = np.matmul(bigXnorm,  W2)
     for i in range(len(JW)):
-        JW[i] = JW[i] - t[i]
+        JW[i] = JW[i] - tnorm[i]
         
-    JW = (L*(float(1/len(t)))) * np.transpose(JW)
+    JW = (L*(float(1/len(tnorm)))) * np.transpose(JW)
   
-    temp1 = np.matmul(JW,bigX[:,0])
-    temp2 = np.matmul(JW,bigX[:,1])
+    temp1 = np.matmul(JW,bigXnorm[:,0])
+    temp2 = np.matmul(JW,bigXnorm[:,1])
 
     W2[0] = W2[0] - temp1
     W2[1] = W2[1] - temp2
-print(W2)
 
+#print(W2)
 
-Y2 = W[0]*x + W[1]
+W2[0] = W2[0] * (float(tmax-tmin)/(xmax-xmin))
+W2[1] = W2[1] - 13.06597862
+
+#print(W2)
+#print(W)
+
+Y2 = W2[0]*x + W2[1]
 
 
 #Plot First Figure : Closed Form
@@ -114,8 +135,7 @@ leg = plt.legend(loc='upper right')
 #Plot Second Figure : Gradient Descent
 plt.figure(2)
 
-plt.plot(x,Y2,label = "Gradient Descent Form")
-
+plt.plot(x,Y2,label = "Gradient Descent Form",color = "green")
 for i in range(len(Data)):
     plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
 
