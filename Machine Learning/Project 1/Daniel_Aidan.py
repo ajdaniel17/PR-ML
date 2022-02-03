@@ -46,17 +46,17 @@ for i in range(rows):
 #Code to do ML HERE
 
 #Closed Form
-x = np.empty((0,1),int)
+x = np.empty((0,1),float)
 for i in range(len(Data)):
     x = np.append(x,np.array([[Data[i].getWeight()]]))
 #print(x)
 
-bigX = np.empty((0,2),int)
+bigX = np.empty((0,2),float)
 for i in range(len(Data)):
     bigX = np.append(bigX,np.array([[Data[i].getWeight(),1]]),0)
 #print(bigX)
 
-t = np.empty((0,1),int)
+t = np.empty((0,1),float)
 for i in range(len(Data)):
     t = np.append(t,np.array([[Data[i].getHorsePower()]]))
 #print(t)
@@ -64,34 +64,37 @@ for i in range(len(Data)):
 w = np.linalg.pinv(bigX)
 W = np.matmul(w,t)
 #print(W)
-
+print(W)
 Y = np.matmul(bigX,W)
 #print(Y)
 
 #Gradient Descent
 
-# W2 = np.empty((0,1),int)
-# for i in range(len(Data)):
+# W2 = np.empty((0,1),float)
+# for i in range(len(bigX[0])):
 #     W2 = np.append(W2,np.array(random.randint(1,100)))
 # print(W2.shape)
+W2 = [[4],[5]]
 
-print(W)
-# L = .1
-# JW = np.matmul(np.matmul(2*np.transpose(W),np.transpose(bigX)),bigX) - (2 * np.matmul(np.transpose(t),bigX))
+L = .0000001
 
-# epoch = 0
-# if epoch < 1000 or JW > .05:
-#     for i in range(len(Data)):
-#         JW = np.matmul(np.matmul(2*np.transpose(W),np.transpose(bigX)),bigX) - (2 * np.matmul(np.transpose(t),bigX))
-    
-#     for i in range(1,len(Data)+1):
-#         print(i)
-#         W2[i] = W2[i-1] - L * JW
+for i in range(15000):
+
+    JW = np.matmul(bigX,  W2)
+    for i in range(len(JW)):
+        JW[i] = JW[i] - t[i]
+        
+    JW = (L*(float(1/len(t)))) * np.transpose(JW)
+  
+    temp1 = np.matmul(JW,bigX[:,0])
+    temp2 = np.matmul(JW,bigX[:,1])
+
+    W2[0] = W2[0] - temp1
+    W2[1] = W2[1] - temp2
+print(W2)
 
 
-
-
-
+Y2 = W[0]*x + W[1]
 
 
 #Plot First Figure : Closed Form
@@ -109,16 +112,18 @@ leg = plt.legend(loc='upper right')
 
 
 #Plot Second Figure : Gradient Descent
-# plt.figure(2)
-# plt.plot(x,W2,label = "Gradient Descent Form")
-# for i in range(len(Data)):
-#     plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
+plt.figure(2)
+
+plt.plot(x,Y2,label = "Gradient Descent Form")
+
+for i in range(len(Data)):
+    plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
 
 
-# plt.xlabel('Weight')
-# plt.ylabel('Horsepower')
-# plt.title("""Matlab's "carbig" dataset""")
-
+plt.xlabel('Weight')
+plt.ylabel('Horsepower')
+plt.title("""Matlab's "carbig" dataset""")
+leg = plt.legend(loc='upper right')
 
 plt.draw()
 plt.show()

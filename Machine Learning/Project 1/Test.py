@@ -31,17 +31,17 @@ car3 = car(4,2)
 Data = [car1,car2,car3]
 
 #Code to do ML HERE
-x = np.empty((0,1),int)
+x = np.empty((0,1),float)
 for i in range(len(Data)):
     x = np.append(x,np.array([[Data[i].getWeight()]]))
 
 
-bigX = np.empty((0,2),int)
+bigX = np.empty((0,2),float)
 for i in range(len(Data)):
     bigX = np.append(bigX,np.array([[Data[i].getWeight(),1]]),0)
 #print(bigX)
 
-t = np.empty((0,1),int)
+t = np.empty((0,1),float)
 for i in range(len(Data)):
     t = np.append(t,np.array([[Data[i].getHorsePower()]]))
 #print(t)
@@ -50,38 +50,42 @@ w = np.linalg.pinv(bigX)
 W = np.matmul(w,t)
 #print(W)
 
-# W2 = np.empty((0,1),int)
-# for i in range(len(bigX[0])):
-#     W2 = np.append(W2,np.array(random.randint(1,100)))
-#print(W2.shape)
-W2 = [[4],[5]]
+
+W2 = np.empty((0,1),float)
+for i in range(len(bigX[0])):
+    W2 = np.append(W2,np.array(random.randint(1,5)))
+# W2 = [[4],[5]]
+
 basicx = np.linspace(3,5,100)
 L = .1
-#JW = np.matmul(np.matmul(2*np.transpose(W2),np.transpose(bigX)),bigX) - (2 * np.matmul(np.transpose(t),bigX))
-#print(JW)
-#print(W2)
-# print(bigX.shape)
-# print(W2)
-# print(t.shape)
-epoch = 0
-# if epoch < 3:
-#     for i in range(len(W2)):
-JW = np.matmul(bigX,  W2) - t
-print(JW)
-       # W2 = W2 - np.matmul(L*(1/len(t)),JW) 
 
-    #epoch = epoch + 1
 
-#print(W2)
-Y2 = W2[0]*basicx + W2[1]
+for i in range(10000):
+
+    JW = np.matmul(bigX,  W2)
+    for i in range(len(JW)):
+        JW[i] = JW[i] - t[i]
+        
+    JW = (L*(1/len(t))) * JW
+  
+    temp1 = np.matmul(np.transpose(JW),bigX[:,0])
+    temp2 = np.matmul(np.transpose(JW),bigX[:,1])
+
+    W2[0] = W2[0] - temp1
+    W2[1] = W2[1] - temp2
+    print(W2)
+
+
+Y2 = W2[0]*x + W2[1]
 Y = np.matmul(bigX,W)
-#print(Y)
+
 #Plot First Figure : Closed Form
 plt.figure(1)
 plt.plot(x,Y)
-plt.plot(basicx,Y2,'r')
 
-#plt.plot(W2[0],W2[1],color = "red")
+#Plot Second Figure : Gradient Descent
+plt.plot(x,Y2,color = 'r', ls = ':')
+
 for i in range(len(Data)):
     plt.plot(Data[i].getWeight(),Data[i].getHorsePower(),'rx')
 
