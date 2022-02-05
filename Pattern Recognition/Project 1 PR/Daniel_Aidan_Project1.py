@@ -26,6 +26,18 @@ class plant():
     def getName(self):
         return self.name
 
+    def getM(self,i):
+        if i == 1:
+            return self.M1
+        elif i == 2:
+            return self.M2
+        elif i == 3:
+            return self.M3
+        elif i == 4:
+            return self.M4
+        else:
+            return
+
 def findInfo(data,M,name,ty):
     temp = np.empty(0,float)
     for i in range(len(data)):
@@ -165,6 +177,46 @@ print("Between-Class Variance for Sepal Width is", BCV2)
 print("Between-Class Variance for Pedal Length is", BCV3)
 print("Between-Class Variance for Pedal Width is", BCV4, "\n")
 
+M1 = np.empty((0,1),float)
+M2 = np.empty((0,1),float)
+M3 = np.empty((0,1),float)
+M4 = np.empty((0,1),float)
+M5 = np.empty((0,1),float)
 
+for i in range(len(Data)):
+    M1 = np.append(M1,Data[i].getM1())
+
+for i in range(len(Data)):
+    M2 = np.append(M2,Data[i].getM2())
+
+for i in range(len(Data)):
+    M3 = np.append(M3,Data[i].getM3())
+
+for i in range(len(Data)):
+    M4 = np.append(M4,Data[i].getM4())
+
+for i in range(len(Data)):
+    if Data[i].getName() == "setosa":
+        M5 = np.append(M5,1)
+    elif Data[i].getName() == "versicolor":
+        M5 = np.append(M5,2)
+    elif Data[i].getName() == "virginica":
+        M5 = np.append(M5,3)
+
+Measurements = [M1,M2,M3,M4,M5]
+
+hml = ["SepL","SepW","PetL","PetW","Class"]
+ 
+Corrarry = np.corrcoef(Measurements)
+
+fig, ax = plt.subplots()
+im = ax.imshow(Corrarry,cmap=plt.cm.coolwarm)
+
+ax.set_xticks(np.arange(len(hml)))
+ax.set_yticks(np.arange(len(hml)))
+ax.set_xticklabels(hml)
+ax.set_yticklabels(hml)
+plt.title("Correlation Coefficient Heat Map")
+plt.colorbar(im)
 
 plt.show()
