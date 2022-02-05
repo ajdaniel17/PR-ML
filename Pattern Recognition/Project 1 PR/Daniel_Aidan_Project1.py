@@ -110,8 +110,9 @@ for i in range(rows):
     else:
         TempPlant = plant(ED.iat[i,0], ED.iat[i,1], ED.iat[i,2], ED.iat[i,3], ED.iat[i,4])
         Data.append(TempPlant)
-        #print(Data[i].getName())
 
+
+#Plotting Data in 2D form
 plt.figure(1)
 plt.xlabel("Sepal Length")
 plt.ylabel("Sepal Width")
@@ -136,7 +137,7 @@ for i in range(len(Data)):
         plt.plot(Data[i].getM3(),Data[i].getM4(),'go')
 plt.title("Pedal Length vs Pedal Width")
 
-
+#General Data Observations
 print("Min Sepal Length is",findInfo(Data, 1, "all", 1))
 print("Max Sepal Length  is",findInfo(Data, 1, "all", 2))
 print("Average Sepal Length  is",findInfo(Data, 1, "all", 3))
@@ -177,6 +178,7 @@ print("Between-Class Variance for Sepal Width is", BCV2)
 print("Between-Class Variance for Pedal Length is", BCV3)
 print("Between-Class Variance for Pedal Width is", BCV4, "\n")
 
+#Correlation Coefficient Heat Map
 M1 = np.empty((0,1),float)
 M2 = np.empty((0,1),float)
 M3 = np.empty((0,1),float)
@@ -218,5 +220,26 @@ ax.set_xticklabels(hml)
 ax.set_yticklabels(hml)
 plt.title("Correlation Coefficient Heat Map")
 plt.colorbar(im)
+
+#Feature VS Class Label Graphs
+plt.figure(4)
+
+plt.subplot(2,2,1)
+plt.plot(M1,M5,'rx')
+plt.title("SepL Vs Class")
+
+plt.subplot(2,2,2)
+plt.plot(M2,M5,'rx')
+plt.title("SepW Vs Class")
+
+plt.subplot(2,2,3)
+plt.plot(M3,M5,'rx')
+plt.title("PetL Vs Class")
+
+plt.subplot(2,2,4)
+plt.plot(M4,M5,'rx')
+plt.title("PetW Vs Class")
+
+plt.tight_layout()
 
 plt.show()
