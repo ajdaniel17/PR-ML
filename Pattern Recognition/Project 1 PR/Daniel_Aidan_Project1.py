@@ -53,7 +53,36 @@ def findInfo(data,M,name,ty):
     else:
         print("ERROR WRONG TY")
         return
-    return
+
+
+def Smaller(X,Y):
+    if len(X) > len(Y):
+        return Y
+    else:
+        return X
+
+
+def correlationCoefficient(X,Y):
+    Xsum = np.sum(X)
+    Ysum = np.sum(Y)
+    XYsum = 0
+    XXsum = 0
+    YYsum = 0
+    Len = len(Smaller(X,Y))
+
+    for i in range(Len):
+        XYsum += X[i]*Y[i]
+
+    for i in range(len(X)):
+        XXsum += X[i]*X[i]
+
+    for i in range(len(Y)):
+        YYsum += Y[i]*Y[i]
+    
+    R = (float)(Len * XYsum - Xsum * Ysum)/(float)(np.sqrt((Len * XXsum - Xsum * Xsum)* (Len * YYsum - Ysum * Ysum)))
+
+    return R
+
 
 #Open the Excel sheet
 ED = pd.read_excel("Proj1DataSet.xlsx")
@@ -71,10 +100,71 @@ for i in range(rows):
         Data.append(TempPlant)
         #print(Data[i].getName())
 
-try:
-    print("Min is ",findInfo(Data, 1, "setosa", 1))
-    print("Max is ",findInfo(Data, 1, "setosa", 2))
-    print("Average is ",findInfo(Data, 1, "setosa", 3))
-    print("Variance is ",findInfo(Data, 1, "setosa", 4))
-except ValueError:
-    pass
+plt.figure(1)
+plt.xlabel("Sepal Length")
+plt.ylabel("Sepal Width")
+for i in range(len(Data)):
+    if Data[i].getName() == "setosa":
+        plt.plot(Data[i].getM1(),Data[i].getM2(),'r+')
+    elif Data[i].getName() == "versicolor":
+        plt.plot(Data[i].getM1(),Data[i].getM2(),'bx')
+    elif Data[i].getName() == "virginica":
+        plt.plot(Data[i].getM1(),Data[i].getM2(),'go')
+plt.title("Sepal Length vs Sepal Width")
+
+plt.figure(2)
+plt.xlabel("Pedal Length")
+plt.ylabel("Pedal Width")
+for i in range(len(Data)):
+    if Data[i].getName() == "setosa":
+        plt.plot(Data[i].getM3(),Data[i].getM4(),'r+')
+    elif Data[i].getName() == "versicolor":
+        plt.plot(Data[i].getM3(),Data[i].getM4(),'bx')
+    elif Data[i].getName() == "virginica":
+        plt.plot(Data[i].getM3(),Data[i].getM4(),'go')
+plt.title("Pedal Length vs Pedal Width")
+
+
+print("Min Sepal Length is",findInfo(Data, 1, "all", 1))
+print("Max Sepal Length  is",findInfo(Data, 1, "all", 2))
+print("Average Sepal Length  is",findInfo(Data, 1, "all", 3))
+print("Variance Sepal Length  is",findInfo(Data, 1, "all", 4))
+
+print("\nMin Sepal Width is",findInfo(Data, 2, "all", 1))
+print("Max Sepal Width  is",findInfo(Data, 2, "all", 2))
+print("Average Sepal Width  is",findInfo(Data, 2, "all", 3))
+print("Variance Sepal Width  is",findInfo(Data, 2, "all", 4))
+
+print("\nMin Pedal Length is",findInfo(Data, 3, "all", 1))
+print("Max Pedal Length  is",findInfo(Data, 3, "all", 2))
+print("Average Pedal Length  is",findInfo(Data, 3, "all", 3))
+print("Variance Pedal Length  is",findInfo(Data, 3, "all", 4))
+
+print("\nMin Pedal Width is",findInfo(Data, 4, "all", 1))
+print("Max Pedal Width  is",findInfo(Data, 4, "all", 2))
+print("Average Pedal Width  is",findInfo(Data, 4, "all", 3))
+print("Variance Pedal Width  is",findInfo(Data, 4, "all", 4))
+
+WCV1 = float(1/3)*(findInfo(Data,1,"setosa",4) + findInfo(Data,1,"versicolor",4) + findInfo(Data,1,"virginica",4))
+WCV2 = float(1/3)*(findInfo(Data,2,"setosa",4) + findInfo(Data,2,"versicolor",4) + findInfo(Data,2,"virginica",4))
+WCV3 = float(1/3)*(findInfo(Data,3,"setosa",4) + findInfo(Data,3,"versicolor",4) + findInfo(Data,3,"virginica",4))
+WCV4 = float(1/3)*(findInfo(Data,4,"setosa",4) + findInfo(Data,4,"versicolor",4) + findInfo(Data,4,"virginica",4))
+
+print("\nWithin-Class Variance for Sepal Length is" , WCV1)
+print("Within-Class Variance for Sepal Width is" , WCV2)
+print("Within-Class Variance for Pedal Length is" , WCV3)
+print("Within-Class Variance for Pedal Width is" , WCV4)
+
+BCV1 = float(1/3)*(pow(findInfo(Data, 1, "setosa", 3) - (findInfo(Data, 1, "all", 3)),2)+pow(findInfo(Data, 1, "versicolor", 3) - (findInfo(Data, 1, "all", 3)),2)+pow(findInfo(Data, 1, "virginica", 3) - (findInfo(Data, 1, "all", 3)),2))
+BCV2 = float(1/3)*(pow(findInfo(Data, 2, "setosa", 3) - (findInfo(Data, 2, "all", 3)),2)+pow(findInfo(Data, 2, "versicolor", 3) - (findInfo(Data, 2, "all", 3)),2)+pow(findInfo(Data, 2, "virginica", 3) - (findInfo(Data, 2, "all", 3)),2))
+BCV3 = float(1/3)*(pow(findInfo(Data, 3, "setosa", 3) - (findInfo(Data, 3, "all", 3)),2)+pow(findInfo(Data, 3, "versicolor", 3) - (findInfo(Data, 3, "all", 3)),2)+pow(findInfo(Data, 3, "virginica", 3) - (findInfo(Data, 3, "all", 3)),2))
+BCV4 = float(1/3)*(pow(findInfo(Data, 4, "setosa", 3) - (findInfo(Data, 4, "all", 3)),2)+pow(findInfo(Data, 4, "versicolor", 3) - (findInfo(Data, 4, "all", 3)),2)+pow(findInfo(Data, 4, "virginica", 3) - (findInfo(Data, 4, "all", 3)),2))
+
+print("\nBetween-Class Variance for Sepal Length is", BCV1)
+print("Between-Class Variance for Sepal Width is", BCV2)
+print("Between-Class Variance for Pedal Length is", BCV3)
+print("Between-Class Variance for Pedal Width is", BCV4, "\n")
+
+
+
+plt.show()
