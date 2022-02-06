@@ -95,6 +95,7 @@ def correlationCoefficient(X,Y):
 
     return R
 
+#def BatchPerceptron(X,Y):
 
 #Open the Excel sheet
 ED = pd.read_excel("Proj1DataSet.xlsx")
