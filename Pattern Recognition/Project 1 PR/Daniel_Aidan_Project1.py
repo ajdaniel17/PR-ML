@@ -98,7 +98,7 @@ def correlationCoefficient(X,Y):
 def BatchPerceptron(X,T):
     Xrows, Xcols = X.shape
     W = np.empty(Xcols,float)
-    L = .001
+    L = .5
     maxEpochs = 1000
     MissX = np.zeros(len(W))
     temp = 0
@@ -345,15 +345,18 @@ print("Least Squares Weight Vectors:",np.transpose(LSW2))
 print("Least Sqaurs Misclassifications:")
 
 plt.figure(5)
-X2P = np.array([0,1,2,3,4,5,6,7])
+#X2P = np.array([0,1,2,3,4,5,6,7])
 for i in range(len(Data)):
     if T2[i] == 1:
         plt.plot(Data[i].getM3(),Data[i].getM4(),'ro')
     else:
         plt.plot(Data[i].getM3(),Data[i].getM4(),'bo')
-BY2 = BW2[2] * X2P + BW2[1]* X2P + BW2[0]
 
-plt.plot(X2P,BY2,label = "Batch Perceptron",color = "green")
+BY2 = (-1.0*(BW2[2]+BW2[1]*X2[:,0])) / BW2[0]
+LY2 = (-1.0*(LSW2[2]+LSW2[1]*X2[:,0])) / LSW2[0]
+
+plt.plot(X2[:,0],BY2,label = "Batch Perceptron",color = "green")
+plt.plot(X2[:,0],LY2,label = "Least Sqaures" ,color = "blue")
 
 plt.xlabel('Pedal Length')
 plt.ylabel('Pedal Width')

@@ -20,14 +20,15 @@ def Misclassified(X,W,T):
 def BatchPerceptron(X,T):
     Xrows, Xcols = X.shape
     W = np.empty(Xcols,float)
-    L = 1
+    L = .5
     maxEpochs = 1000
     MissX = np.zeros(len(W))
     temp = 0
     for i in range(len(W)):
         W[i] = random.randint(1,10)
-    
+    #W = np.array([1.0,1.0])
     for N in range(maxEpochs):
+        print(W)
         for i in range(Xrows):
             for j in range(len(W)):
                 temp += X[i][j]*W[j]
@@ -55,40 +56,39 @@ def LeastSquares(X,T):
 
 
 
-X = np.array([[1,1],[2,1],[4,1],[5,1]])
+X = np.array([[1,1,1],[2,1,1],[4,5,1],[5,5,1]])
 Xtru = np.array([0,2,3,5])
 Xreal = np.array([1,2,4,5])
 Y = np.array([[1],[1],[0],[0]])
 
-#Xthing = np.transpose([1,np.transpose(X)])
-
 W1, N1= BatchPerceptron(X,Y)
+print("Batch Perceptron Weight Vectors: ",W1)
 
 W2 = LeastSquares(X,Y)
 
+Y2 = (-1.0*(W2[2]+W2[1]*X[:,0]))/W2[0]
+Y3 = (-1.0*(W1[2]+W1[1]*X[:,0]))/W1[0]
 
-#print(W2)
-#print(W1)
 
-#print(W2)
-
-#Y2 = Xtru*W2[0] + W2[1]
-Y3 = Xtru*W1[0] + W1[1]
-#Y2 = -W2[0] / W2[1] * Xtru
-#print(Y3)
-#print(W1)
 Num1 = Misclassified(X,W1,Y)
 Num2 = Misclassified(X,W2,Y)
-print("Batch Errors:" , Num1)
-print("LS Errors:" , Num2)
+#print("Batch Errors:" , Num1)
+#print("LS Errors:" , Num2)
 
-line_x = np.linspace(0, 9)
-Y2 = -W2[0] / W2[1]  * line_x
+
+
 
 plt.figure(1)
-plt.plot(Xreal,Y,'rx')
+
+for i in range(len(Y)):
+    if Y[i] == 0:
+        plt.plot(X[i][0],X[i][1],'rx')
+    else:
+        plt.plot(X[i][0],X[i][1],'bx')
+        
 #plt.plot(Xreal,Y2,'y')
-plt.plot(Xtru,Y3,'g:')
-plt.plot(line_x, Y2)
+plt.plot(X[:,0],Y3,'g:')
+#plt.plot(X[:,0],Y2,'b:')
+#plt.plot(line_x, Y2)
 plt.draw()
 plt.show()
