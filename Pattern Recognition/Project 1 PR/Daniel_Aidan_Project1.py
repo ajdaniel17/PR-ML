@@ -95,7 +95,53 @@ def correlationCoefficient(X,Y):
 
     return R
 
-#def BatchPerceptron(X,Y):
+def BatchPerceptron(X,T):
+    Xrows, Xcols = X.shape
+    W = np.empty(Xcols,float)
+    L = .001
+    maxEpochs = 1000
+    MissX = np.zeros(len(W))
+    temp = 0
+    for i in range(len(W)):
+        W[i] = random.randint(1,10)
+    
+    for N in range(maxEpochs):
+        for i in range(Xrows):
+            for j in range(len(W)):
+                temp += X[i][j]*W[j]
+            if(temp > 0 and T[i] == 0):
+                MissX += (X[i,:]*-1)
+            elif(temp <= 0 and T[i] == 1 or temp == 1):
+                MissX += X[i,:]
+            temp = 0
+        
+        if np.sum(MissX) == 0:
+            return W,N
+
+        for j in range(len(W)):
+            W[j] += MissX[j]*L
+        
+        MissX = np.zeros(len(W))
+
+    return W,maxEpochs
+
+def LeastSquares(X,T):
+    return np.matmul(np.linalg.pinv(X),T)
+
+def Misclassified(X,W,T):
+    Xrows, Xcols = X.shape
+    temp = 0
+    B = 0
+    for N in range(Xrows):
+        for j in range(len(W)):
+                temp += X[N][j]*W[j]
+        if(temp > 0 and T[N] == 0):
+                B += 1 
+        elif(temp <= 0 and T[N] == 1 or temp == 1):
+                B += 1
+        temp = 0
+    return B
+
 
 #Open the Excel sheet
 ED = pd.read_excel("Proj1DataSet.xlsx")
@@ -240,7 +286,80 @@ plt.title("PetL Vs Class")
 plt.subplot(2,2,4)
 plt.plot(M4,M5,'rx')
 plt.title("PetW Vs Class")
+plt.tight_layout()
+#Classification Tasks
+
+#Setosa Vs Versi+Virigi
+X1 = np.empty((0,5),float)
+for i in range(len(Data)):
+    X1 = np.append(X1,np.array([[Data[i].getM1(),Data[i].getM2(),Data[i].getM3(),Data[i].getM4(),1]]),0)
+#print(X1)
+
+T1 = np.empty((0,1),float)
+for i in range(len(Data)):
+    if Data[i].getName() == "setosa":
+        T1 = np.append(T1,np.array([[1]]),0)
+    elif Data[i].getName() == "versicolor":
+        T1 = np.append(T1,np.array([[0]]),0)
+    elif Data[i].getName() == "virginica":
+        T1 = np.append(T1,np.array([[0]]),0)   
+#print(Y1)
+
+print("Setosa VS Versi+Virigi : All Features")
+BW1,N1 = BatchPerceptron(X1,T1)
+LSW1 = LeastSquares(X1,T1)
+MBW1 = Misclassified(X1,BW1,T1)
+if(N1 != 1000):
+    print("Batch Perceptron Converged!")
+else:
+    print("Batch Perceptron did Not Converge!")
+
+print("Batch Perceptron # of Epochs:",N1)
+print("Batch Perceptron Weight Vectors:",BW1)
+print("Batch Perceptron Misclassifications:", MBW1)
+print("Least Squares Weight Vectors:",np.transpose(LSW1))
+print("Least Sqaurs Misclassifications:")
+
+print("\n\n")
+
+#Setosa Vs Versi+Virigi
+X2 = np.empty((0,3),float)
+for i in range(len(Data)):
+    X2 = np.append(X2,np.array([[Data[i].getM3(),Data[i].getM4(),1]]),0)
+
+T2 = T1
+
+print("Setosa VS Versi+Virigi: Features 3 and 4")
+BW2,N2 = BatchPerceptron(X2,T2)
+LSW2 = LeastSquares(X2,T2)
+MBW2 = Misclassified(X2,BW2,T2)
+if(N2 != 1000):
+    print("Batch Perceptron Converged!")
+else:
+    print("Batch Perceptron did Not Converge!")
+
+print("Batch Perceptron # of Epochs:",N2)
+print("Batch Perceptron Weight Vectors:",BW2)
+print("Batch Perceptron Misclassifications:", MBW2)
+print("Least Squares Weight Vectors:",np.transpose(LSW2))
+print("Least Sqaurs Misclassifications:")
+
+plt.figure(5)
+X2P = np.array([0,1,2,3,4,5,6,7])
+for i in range(len(Data)):
+    if T2[i] == 1:
+        plt.plot(Data[i].getM3(),Data[i].getM4(),'ro')
+    else:
+        plt.plot(Data[i].getM3(),Data[i].getM4(),'bo')
+BY2 = BW2[2] * X2P + BW2[1]* X2P + BW2[0]
+
+plt.plot(X2P,BY2,label = "Batch Perceptron",color = "green")
+
+plt.xlabel('Pedal Length')
+plt.ylabel('Pedal Width')
+plt.title("Setosa VS Versi+Virgi: Features 3 and 4")
+leg = plt.legend(loc='upper right')
+
 
 plt.tight_layout()
-
 plt.show()
