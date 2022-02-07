@@ -95,26 +95,34 @@ def correlationCoefficient(X,Y):
 
     return R
 
-def BatchPerceptron(X,T):
+
+def BatchPerceptron(X,T,L):
     Xrows, Xcols = X.shape
     W = np.empty(Xcols,float)
-    L = .5
+    valE = L / 100.0
     maxEpochs = 1000
     MissX = np.zeros(len(W))
     temp = 0
+    Num = 100
     for i in range(len(W)):
         W[i] = random.randint(1,10)
-    
+    #W = np.array([1.0,1.0])
     for N in range(maxEpochs):
+        if N >= Num:
+            L -= valE
+            Num += 100
         for i in range(Xrows):
             for j in range(len(W)):
-                temp += X[i][j]*W[j]
+                if ((j+2) <= len(W)):
+                    temp += float(X[i][j])*W[(len(W)-(j+2))]
+                else:
+                    temp += float(X[i][j])*W[j]
             if(temp > 0 and T[i] == 0):
-                MissX += (X[i,:]*-1)
+                MissX += X[i,:]*-1.0
             elif(temp <= 0 and T[i] == 1 or temp == 1):
                 MissX += X[i,:]
             temp = 0
-        
+            
         if np.sum(MissX) == 0:
             return W,N
 
@@ -134,7 +142,10 @@ def Misclassified(X,W,T):
     B = 0
     for N in range(Xrows):
         for j in range(len(W)):
-                temp += X[N][j]*W[j]
+            if ((j+2) <= len(W)):
+                temp += float(X[N][j])*W[(len(W)-(j+2))]
+            else:
+                temp += float(X[N][j])*W[j]
         if(temp > 0 and T[N] == 0):
                 B += 1 
         elif(temp <= 0 and T[N] == 1 or temp == 1):
@@ -306,7 +317,7 @@ for i in range(len(Data)):
 #print(Y1)
 
 print("Setosa VS Versi+Virigi : All Features")
-BW1,N1 = BatchPerceptron(X1,T1)
+BW1,N1 = BatchPerceptron(X1,T1,.1)
 LSW1 = LeastSquares(X1,T1)
 MBW1 = Misclassified(X1,BW1,T1)
 if(N1 != 1000):
@@ -330,7 +341,7 @@ for i in range(len(Data)):
 T2 = T1
 
 print("Setosa VS Versi+Virigi: Features 3 and 4")
-BW2,N2 = BatchPerceptron(X2,T2)
+BW2,N2 = BatchPerceptron(X2,T2,.01)
 LSW2 = LeastSquares(X2,T2)
 MBW2 = Misclassified(X2,BW2,T2)
 if(N2 != 1000):
@@ -342,7 +353,7 @@ print("Batch Perceptron # of Epochs:",N2)
 print("Batch Perceptron Weight Vectors:",BW2)
 print("Batch Perceptron Misclassifications:", MBW2)
 print("Least Squares Weight Vectors:",np.transpose(LSW2))
-print("Least Sqaurs Misclassifications:")
+print("Least Squares Misclassifications:")
 
 plt.figure(5)
 #X2P = np.array([0,1,2,3,4,5,6,7])
@@ -356,7 +367,7 @@ BY2 = (-1.0*(BW2[2]+BW2[1]*X2[:,0])) / BW2[0]
 LY2 = (-1.0*(LSW2[2]+LSW2[1]*X2[:,0])) / LSW2[0]
 
 plt.plot(X2[:,0],BY2,label = "Batch Perceptron",color = "green")
-plt.plot(X2[:,0],LY2,label = "Least Sqaures" ,color = "blue")
+#plt.plot(X2[:,0],LY2,label = "Least Sqaures" ,color = "blue")
 
 plt.xlabel('Pedal Length')
 plt.ylabel('Pedal Width')

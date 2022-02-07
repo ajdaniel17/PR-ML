@@ -9,7 +9,10 @@ def Misclassified(X,W,T):
     B = 0
     for N in range(Xrows):
         for j in range(len(W)):
-                temp += X[N][j]*W[j]
+            if ((j+2) <= len(W)):
+                temp += float(X[N][j])*W[(len(W)-(j+2))]
+            else:
+                temp += float(X[N][j])*W[j]
         if(temp > 0 and T[N] == 0):
                 B += 1 
         elif(temp <= 0 and T[N] == 1 or temp == 1):
@@ -20,24 +23,30 @@ def Misclassified(X,W,T):
 def BatchPerceptron(X,T):
     Xrows, Xcols = X.shape
     W = np.empty(Xcols,float)
-    L = .5
+    L = .01
     maxEpochs = 1000
     MissX = np.zeros(len(W))
     temp = 0
+    Num = 100
     for i in range(len(W)):
         W[i] = random.randint(1,10)
     #W = np.array([1.0,1.0])
     for N in range(maxEpochs):
-        print(W)
+        if N >= Num:
+            L -= .0005
+            Num += 100
         for i in range(Xrows):
             for j in range(len(W)):
-                temp += X[i][j]*W[j]
+                if ((j+2) <= len(W)):
+                    temp += float(X[i][j])*W[(len(W)-(j+2))]
+                else:
+                    temp += float(X[i][j])*W[j]
             if(temp > 0 and T[i] == 0):
-                MissX += (X[i,:]*-1)
+                MissX += X[i,:]*-1.0
             elif(temp <= 0 and T[i] == 1 or temp == 1):
                 MissX += X[i,:]
             temp = 0
-        
+
         if np.sum(MissX) == 0:
             print(N , "# of Epochs")
             return W,N
@@ -72,11 +81,8 @@ Y3 = (-1.0*(W1[2]+W1[1]*X[:,0]))/W1[0]
 
 Num1 = Misclassified(X,W1,Y)
 Num2 = Misclassified(X,W2,Y)
-#print("Batch Errors:" , Num1)
+print("Batch Errors:" , Num1)
 #print("LS Errors:" , Num2)
-
-
-
 
 plt.figure(1)
 
