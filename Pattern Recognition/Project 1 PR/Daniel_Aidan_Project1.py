@@ -105,7 +105,7 @@ def BatchPerceptron(X,T,L):
     temp = 0
     Num = 100
     for i in range(len(W)):
-        W[i] = random.randint(1,10)
+        W[i] = random.randint(1,50)
     #W = np.array([1.0,1.0])
     for N in range(maxEpochs):
         if N >= Num:

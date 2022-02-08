@@ -23,13 +23,13 @@ def Misclassified(X,W,T):
 def BatchPerceptron(X,T):
     Xrows, Xcols = X.shape
     W = np.empty(Xcols,float)
-    L = .01
+    L = 1
     maxEpochs = 1000
     MissX = np.zeros(len(W))
     temp = 0
     Num = 100
     for i in range(len(W)):
-        W[i] = random.randint(1,10)
+        W[i] = random.randint(1,50)
     #W = np.array([1.0,1.0])
     for N in range(maxEpochs):
         if N >= Num:
