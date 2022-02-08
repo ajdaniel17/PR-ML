@@ -142,13 +142,14 @@ def Misclassified(X,W,T):
     B = 0
     for N in range(Xrows):
         for j in range(len(W)):
+
             if ((j+2) <= len(W)):
                 temp += float(X[N][j])*W[(len(W)-(j+2))]
             else:
                 temp += float(X[N][j])*W[j]
         if(temp > 0 and T[N] == 0):
                 B += 1 
-        elif(temp <= 0 and T[N] == 1 or temp == 1):
+        elif(temp <= 0 and T[N] == 1):
                 B += 1
         temp = 0
     return B
@@ -329,7 +330,7 @@ print("Batch Perceptron # of Epochs:",N1)
 print("Batch Perceptron Weight Vectors:",BW1)
 print("Batch Perceptron Misclassifications:", MBW1)
 print("Least Squares Weight Vectors:",np.transpose(LSW1))
-print("Least Sqaurs Misclassifications:")
+print("Least Squares Misclassifications:")
 
 print("\n\n")
 
@@ -372,6 +373,79 @@ plt.plot(X2[:,0],BY2,label = "Batch Perceptron",color = "green")
 plt.xlabel('Pedal Length')
 plt.ylabel('Pedal Width')
 plt.title("Setosa VS Versi+Virgi: Features 3 and 4")
+leg = plt.legend(loc='upper right')
+
+
+print("\n\n")
+
+#Virgi Vs Versi+Setosa : All Features
+X3 = X1
+
+T3 = np.empty((0,1),float)
+for i in range(len(Data)):
+    if Data[i].getName() == "setosa":
+        T3 = np.append(T3,np.array([[0]]),0)
+    elif Data[i].getName() == "versicolor":
+        T3 = np.append(T3,np.array([[0]]),0)
+    elif Data[i].getName() == "virginica":
+        T3 = np.append(T3,np.array([[1]]),0)   
+#print(T3)
+
+print("Virgi VS Versi+Setosa : All Features")
+BW3,N3 = BatchPerceptron(X3,T3,.1)
+LSW3 = LeastSquares(X3,T3)
+MBW3 = Misclassified(X3,BW3,T3)
+if(N3 != 1000):
+    print("Batch Perceptron Converged!")
+else:
+    print("Batch Perceptron did Not Converge!")
+
+print("Batch Perceptron # of Epochs:",N3)
+print("Batch Perceptron Weight Vectors:",BW3)
+print("Batch Perceptron Misclassifications:", MBW3)
+print("Least Squares Weight Vectors:",np.transpose(LSW3))
+print("Least Squares Misclassifications:")
+
+print("\n\n")
+
+#Virgi VS Versi+Setosa : Features 3 and 4
+
+X4 = X2
+
+T4 = T3
+
+print("Virgi VS Versi+Setosa: Features 3 and 4")
+BW4,N4 = BatchPerceptron(X4,T4,.0001)
+LSW4 = LeastSquares(X4,T4)
+MBW4 = Misclassified(X4,BW4,T4)
+if(N4 != 1000):
+    print("Batch Perceptron Converged!")
+else:
+    print("Batch Perceptron did Not Converge!")
+
+print("Batch Perceptron # of Epochs:",N4)
+print("Batch Perceptron Weight Vectors:",BW4)
+print("Batch Perceptron Misclassifications:", MBW4)
+print("Least Squares Weight Vectors:",np.transpose(LSW4))
+print("Least Squares Misclassifications:")
+
+plt.figure(6)
+#X2P = np.array([0,1,2,3,4,5,6,7])
+for i in range(len(Data)):
+    if T4[i] == 1:
+        plt.plot(Data[i].getM3(),Data[i].getM4(),'ro')
+    else:
+        plt.plot(Data[i].getM3(),Data[i].getM4(),'bo')
+
+BY4 = (-1.0*(BW4[2]+BW4[1]*X4[:,0])) / BW4[0]
+LY4 = (-1.0*(LSW4[2]+LSW4[1]*X4[:,0])) / LSW4[0]
+
+plt.plot(X4[:,0],BY4,label = "Batch Perceptron",color = "green")
+#plt.plot(X2[:,0],LY2,label = "Least Sqaures" ,color = "blue")
+
+plt.xlabel('Pedal Length')
+plt.ylabel('Pedal Width')
+plt.title("Virgi VS Versi+Setosa: Features 3 and 4")
 leg = plt.legend(loc='upper right')
 
 

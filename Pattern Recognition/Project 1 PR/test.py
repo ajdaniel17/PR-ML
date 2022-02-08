@@ -61,11 +61,11 @@ def BatchPerceptron(X,T):
 
     
 def LeastSquares(X,T):
-    return np.matmul(np.linalg.pinv(X),T)
+    return (np.matmul((np.linalg.pinv(X)),T))
 
 
 
-X = np.array([[1,1,1],[2,1,1],[4,5,1],[5,5,1]])
+X = np.array([[1,1,1],[2,1,1],[4,5,1],[8,9,1]])
 Xtru = np.array([0,2,3,5])
 Xreal = np.array([1,2,4,5])
 Y = np.array([[1],[1],[0],[0]])
@@ -74,8 +74,9 @@ W1, N1= BatchPerceptron(X,Y)
 print("Batch Perceptron Weight Vectors: ",W1)
 
 W2 = LeastSquares(X,Y)
+print("Least Squares Weight Vectors: ",W2)
 
-Y2 = (-1.0*(W2[2]+W2[1]*X[:,0]))/W2[0]
+Y2 = (-1.0*(W2[2][0]+W2[1][0]*X[:,0]))/W2[0][0]
 Y3 = (-1.0*(W1[2]+W1[1]*X[:,0]))/W1[0]
 
 
@@ -94,7 +95,7 @@ for i in range(len(Y)):
         
 #plt.plot(Xreal,Y2,'y')
 plt.plot(X[:,0],Y3,'g:')
-#plt.plot(X[:,0],Y2,'b:')
+plt.plot(X[:,0],Y2,'b:')
 #plt.plot(line_x, Y2)
 plt.draw()
 plt.show()
