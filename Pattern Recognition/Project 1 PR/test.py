@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 
+random.seed(7)
 def Misclassified(X,W,T):
     Xrows, Xcols = X.shape
     temp = 0
@@ -24,7 +25,7 @@ def BatchPerceptron(X,T):
     Xrows, Xcols = X.shape
     W = np.empty(Xcols,float)
     L = 1
-    maxEpochs = 1000
+    maxEpochs = 10000
     MissX = np.zeros(len(W))
     temp = 0
     Num = 100
@@ -65,24 +66,40 @@ def LeastSquares(X,T):
 
 
 
-X = np.array([[1,1,1],[2,1,1],[4,5,1],[8,9,1]])
+X = np.array([[1,1,1],
+              [2,1,1],
+              [4,5,1],
+              [8,9,1]])
+
 Xtru = np.array([0,2,3,5])
 Xreal = np.array([1,2,4,5])
-Y = np.array([[1],[1],[0],[0]])
+
+Y = np.array([[1],
+              [1],
+              [0],
+              [0]])
 
 W1, N1= BatchPerceptron(X,Y)
-print("Batch Perceptron Weight Vectors: ",W1)
+#print("Batch Perceptron Weight Vectors: ",W1)
 
 W2 = LeastSquares(X,Y)
-print("Least Squares Weight Vectors: ",W2)
+#print("Least Squares Weight Vectors: ",W2)
 
-Y2 = (-1.0*(W2[2][0]+W2[1][0]*X[:,0]))/W2[0][0]
-Y3 = (-1.0*(W1[2]+W1[1]*X[:,0]))/W1[0]
+X1Range = np.linspace(0, 9)
+X2Range = np.linspace(0, 9)
 
+Y2 = W2[0]*X2Range + W2[1]*X1Range + W2[2] + .5
 
+Predict = np.matmul(X,W2) 
+
+Y1 = (-1.0*(W1[2]+W1[1]*X[:,0]))/W1[0]
+
+print(Predict)
+
+#print(Y2)
 Num1 = Misclassified(X,W1,Y)
 Num2 = Misclassified(X,W2,Y)
-print("Batch Errors:" , Num1)
+#print("Batch Errors:" , Num1)
 #print("LS Errors:" , Num2)
 
 plt.figure(1)
@@ -94,8 +111,9 @@ for i in range(len(Y)):
         plt.plot(X[i][0],X[i][1],'bx')
         
 #plt.plot(Xreal,Y2,'y')
-plt.plot(X[:,0],Y3,'g:')
-plt.plot(X[:,0],Y2,'b:')
+plt.plot(X[:,0],Y1,'g:',label = "Batch Perceptron")
+plt.plot(X1Range,Y2,'b:',label = "Least Sqaures")
 #plt.plot(line_x, Y2)
+leg = plt.legend(loc='upper right')
 plt.draw()
 plt.show()

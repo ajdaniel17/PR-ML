@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 
+
+random.seed(1)
 class plant():
     def __init__(self,m1,m2,m3,m4,n):
         self.M1 = m1
@@ -153,6 +155,17 @@ def Misclassified(X,W,T):
                 B += 1
         temp = 0
     return B
+
+def LSMiss(X,W,T):
+    error = 0
+    for i in range(len(X)):
+        temp = X[i][0] * W[0] + X[i][1] * W[1] + W[2] + .5
+
+        if T[i] == 1 and temp < .5:
+            error += 1
+        elif T[i] == 0 and temp >= .5:
+            error += 1
+    return error
 
 
 #Open the Excel sheet
@@ -321,6 +334,7 @@ print("Setosa VS Versi+Virigi : All Features")
 BW1,N1 = BatchPerceptron(X1,T1,.1)
 LSW1 = LeastSquares(X1,T1)
 MBW1 = Misclassified(X1,BW1,T1)
+MLS1 = LSMiss(X1,LSW1,T1)
 if(N1 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -330,7 +344,7 @@ print("Batch Perceptron # of Epochs:",N1)
 print("Batch Perceptron Weight Vectors:",BW1)
 print("Batch Perceptron Misclassifications:", MBW1)
 print("Least Squares Weight Vectors:",np.transpose(LSW1))
-print("Least Squares Misclassifications:")
+print("Least Squares Misclassifications:",MLS1)
 
 print("\n\n")
 
@@ -345,6 +359,7 @@ print("Setosa VS Versi+Virigi: Features 3 and 4")
 BW2,N2 = BatchPerceptron(X2,T2,.01)
 LSW2 = LeastSquares(X2,T2)
 MBW2 = Misclassified(X2,BW2,T2)
+MLS2 = LSMiss(X2,LSW2,T2)
 if(N2 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -354,7 +369,7 @@ print("Batch Perceptron # of Epochs:",N2)
 print("Batch Perceptron Weight Vectors:",BW2)
 print("Batch Perceptron Misclassifications:", MBW2)
 print("Least Squares Weight Vectors:",np.transpose(LSW2))
-print("Least Squares Misclassifications:")
+print("Least Squares Misclassifications:",MLS2)
 
 plt.figure(5)
 #X2P = np.array([0,1,2,3,4,5,6,7])
@@ -364,11 +379,14 @@ for i in range(len(Data)):
     else:
         plt.plot(Data[i].getM3(),Data[i].getM4(),'bo')
 
+X1Range2 = np.linspace(1, 7)
+X2Range2 = np.linspace(0, 2.5)
+
 BY2 = (-1.0*(BW2[2]+BW2[1]*X2[:,0])) / BW2[0]
-LY2 = (-1.0*(LSW2[2]+LSW2[1]*X2[:,0])) / LSW2[0]
+LY2 = LSW2[0]*X2Range2 + LSW2[1]*X1Range2 + LSW2[2] + .5
 
 plt.plot(X2[:,0],BY2,label = "Batch Perceptron",color = "green")
-#plt.plot(X2[:,0],LY2,label = "Least Sqaures" ,color = "blue")
+plt.plot(X1Range2,LY2,label = "Least Sqaures" ,color = "blue")
 
 plt.xlabel('Pedal Length')
 plt.ylabel('Pedal Width')
@@ -395,6 +413,7 @@ print("Virgi VS Versi+Setosa : All Features")
 BW3,N3 = BatchPerceptron(X3,T3,.1)
 LSW3 = LeastSquares(X3,T3)
 MBW3 = Misclassified(X3,BW3,T3)
+MLS3 = LSMiss(X3,LSW3,T3)
 if(N3 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -404,7 +423,7 @@ print("Batch Perceptron # of Epochs:",N3)
 print("Batch Perceptron Weight Vectors:",BW3)
 print("Batch Perceptron Misclassifications:", MBW3)
 print("Least Squares Weight Vectors:",np.transpose(LSW3))
-print("Least Squares Misclassifications:")
+print("Least Squares Misclassifications:",MLS3)
 
 print("\n\n")
 
@@ -418,6 +437,7 @@ print("Virgi VS Versi+Setosa: Features 3 and 4")
 BW4,N4 = BatchPerceptron(X4,T4,.0001)
 LSW4 = LeastSquares(X4,T4)
 MBW4 = Misclassified(X4,BW4,T4)
+MLS4 = LSMiss(X4,LSW4,T4)
 if(N4 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -427,7 +447,7 @@ print("Batch Perceptron # of Epochs:",N4)
 print("Batch Perceptron Weight Vectors:",BW4)
 print("Batch Perceptron Misclassifications:", MBW4)
 print("Least Squares Weight Vectors:",np.transpose(LSW4))
-print("Least Squares Misclassifications:")
+print("Least Squares Misclassifications:",MLS4)
 
 plt.figure(6)
 #X2P = np.array([0,1,2,3,4,5,6,7])
@@ -437,17 +457,19 @@ for i in range(len(Data)):
     else:
         plt.plot(Data[i].getM3(),Data[i].getM4(),'bo')
 
+X2Range4 = np.linspace(0, 2)
+
 BY4 = (-1.0*(BW4[2]+BW4[1]*X4[:,0])) / BW4[0]
-LY4 = (-1.0*(LSW4[2]+LSW4[1]*X4[:,0])) / LSW4[0]
+LY4 = LSW4[0]*X2Range4 + LSW4[1]*X1Range2 + LSW4[2] + .5
 
 plt.plot(X4[:,0],BY4,label = "Batch Perceptron",color = "green")
-#plt.plot(X2[:,0],LY2,label = "Least Sqaures" ,color = "blue")
+plt.plot(X1Range2,LY4,label = "Least Sqaures" ,color = "blue")
 
 plt.xlabel('Pedal Length')
 plt.ylabel('Pedal Width')
 plt.title("Virgi VS Versi+Setosa: Features 3 and 4")
 leg = plt.legend(loc='upper right')
 
-
+#Setosa Vs Versi Vs Virigi
 plt.tight_layout()
 plt.show()
