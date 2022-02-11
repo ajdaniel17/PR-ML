@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-random.seed(69)
-np.random.seed(3310)
+
+np.random.seed(45)
 Pi = np.pi
 SD = .3
 
@@ -48,6 +48,7 @@ for i in range(10):
     RMS1.append(LSError(Phi[i],W1[i],TrainTarget1))
 
 
+
 NTest = 100
 XTest1 = np.random.uniform(0,1,NTest)
 EX2 = (1/(SD*np.sqrt(2*Pi))) * np.exp(-.5*((XTest1-np.mean(XTest1)/SD)**2))
@@ -68,9 +69,6 @@ for i in range(10):
     RMS2.append(LSError(Phi2[i],W1[i],TestTarget2))
 
 
-#print(RMS1)
-#print(RMS2)
-
 plt.figure(1)
 plotx = [0,1,2,3,4,5,6,7,8,9]
 plt.plot(plotx,RMS2,'--ro',label = "Test")
@@ -82,6 +80,8 @@ plt.xlabel('M')
 plt.ylabel('ERMS')
 plt.title("N Train = 10")
 leg = plt.legend(loc='upper right')
+
+
 
 plt.draw()
 plt.show()
