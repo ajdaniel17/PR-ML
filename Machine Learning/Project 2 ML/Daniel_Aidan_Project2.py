@@ -70,7 +70,6 @@ plt.figure(1)
 plotx = [0,1,2,3,4,5,6,7,8,9]
 plt.plot(plotx,RMS2,'--ro',label = "Test")
 plt.plot(plotx,RMS1,'--bo',label = "Training")
-
 plt.xlim(0,9)
 plt.ylim(0,1)
 plt.xlabel('M')
