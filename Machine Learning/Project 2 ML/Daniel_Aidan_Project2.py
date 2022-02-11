@@ -11,15 +11,11 @@ def LeastSquares(X,T):
     return np.matmul(np.linalg.pinv(X),T)
 
 def LSError(X,W,T):
-    Xrows, Xcols = X.shape
-    y = 0
-    error = 0.0
-    for i in range(Xrows):
-        for j in range(Xcols):
-            y += X[i][j]* W[j]
-        error += ((y - T[i]) ** 2)  
-        y = 0
-    RMS = np.sqrt((error / (Xrows)))
+    Y = np.matmul(X,W)
+    error = 0
+    for i in range(len(Y)):
+        error += ((Y[i] - T[i]) ** 2)  
+    RMS = np.sqrt((error / (len(Y))))
     return RMS
 
 NTrain = 10
@@ -67,7 +63,7 @@ for i in range(10):
 RMS2 = []
 for i in range(10):
     RMS2.append(LSError(Phi2[i],W1[i],TestTarget2))
-
+RMS2[9] = RMS2[9] 
 
 plt.figure(1)
 plotx = [0,1,2,3,4,5,6,7,8,9]
