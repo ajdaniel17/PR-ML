@@ -85,10 +85,10 @@ X2 = np.array([[1,1,1],
               [4,5,1],
               [8,9,1]])
 
-Y3 = np.array([[1,0,0],
-              [1,0,0],
-              [0,1,0],
-              [0,0,1]])
+Y3 = np.array([[1,0],
+              [1,0],
+              [0,1],
+              [0,1]])
 
 W1, N1= BatchPerceptron(X,Y)
 #print("Batch Perceptron Weight Vectors: ",W1)
@@ -102,13 +102,13 @@ X1Range = np.linspace(0, 9)
 X2Range = np.linspace(0, 9)
 
 #testvalues = W3[0][0]*X2Range + W3[1][0]*X1Range + W3[2][0]
-d1 = W3[0][0]*X2Range + W3[1][0]*X1Range + W3[2][0] 
-d2 = W3[0][1]*X2Range + W3[1][1]*X1Range + W3[2][1] 
-d3 = W3[0][2]*X2Range + W3[1][2]*X1Range + W3[2][2] 
+d1 = W3[1][0]*X2Range + W3[0][0]*X1Range + W3[2][0] 
+d2 = W3[1][1]*X2Range + W3[0][1]*X1Range + W3[2][1] 
+#d3 = W3[0][2]*X2Range + W3[1][2]*X1Range + W3[2][2] 
 
-Y4 = d2 - d1
-Y5 = d1 - d3
-Y6 = d3 - d2
+Y4 = (X1Range*(W3[0][1]-W3[0][0])+(W3[2][1]-W3[2][0]))/(W3[1][0]-W3[1][1])
+#Y5 = d1 - d3
+#Y6 = d3 - d2
 
 Y2 = W2[0]*X2Range + W2[1]*X1Range + W2[2] + .5
 
@@ -137,8 +137,8 @@ for i in range(len(Y)):
 plt.plot(X[:,0],Y1,'g:',label = "Batch Perceptron")
 plt.plot(X1Range,Y2,'b:',label = "Least Sqaures")
 plt.plot(X1Range,Y4,'r',label = "Least Sqaures MUlti1")
-plt.plot(X1Range,Y5,'b',label = "Least Sqaures MUlti2")
-plt.plot(X1Range,Y6,'g',label = "Least Sqaures MUlti3")
+#plt.plot(X1Range,Y5,'b',label = "Least Sqaures MUlti2")
+#plt.plot(X1Range,Y6,'g',label = "Least Sqaures MUlti3")
 #plt.plot(line_x, Y2)
 leg = plt.legend(loc='upper right')
 plt.draw()

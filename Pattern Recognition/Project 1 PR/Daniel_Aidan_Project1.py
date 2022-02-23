@@ -160,7 +160,7 @@ def Misclassified(X,W,T):
 def LSMiss(X,W,T):
     error = 0
     for i in range(len(X)):
-        temp = X[i][0] * W[0] + X[i][1] * W[1] + W[2] + .5
+        temp = X[i][1] * W[1] + X[i][0] * W[0] + W[2]
 
         if T[i] == 1 and temp < .5:
             error += 1
@@ -332,10 +332,19 @@ for i in range(len(Data)):
 #print(Y1)
 
 print("Setosa VS Versi+Virigi : All Features")
-BW1,N1 = BatchPerceptron(X1,T1,.01)
+BW1,N1 = BatchPerceptron(X1,T1,.0001)
 LSW1 = LeastSquares(X1,T1)
 MBW1 = Misclassified(X1,BW1,T1)
-MLS1 = LSMiss(X1,LSW1,T1)
+
+MLS1 = 0
+for i in range(len(X1)):
+    temp = X1[i][0] * LSW1[0] + X1[i][1] * LSW1[1] +  X1[i][2] * LSW1[2] + X1[i][3] * LSW1[3] + LSW1[4]
+
+    if T1[i] == 1 and temp < .5:
+        MLS1 += 1
+    elif T1[i] == 0 and temp >= .5:
+        MLS1 += 1
+
 if(N1 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -360,7 +369,17 @@ print("Setosa VS Versi+Virigi: Features 3 and 4")
 BW2,N2 = BatchPerceptron(X2,T2,.01)
 LSW2 = LeastSquares(X2,T2)
 MBW2 = Misclassified(X2,BW2,T2)
-MLS2 = LSMiss(X2,LSW2,T2)
+
+MLS2 = 0
+for i in range(len(X2)):
+    temp = X2[i][0] * LSW2[0] + X2[i][1] * LSW2[1] + LSW2[2]
+
+    if T2[i] == 1 and temp < .5:
+        MLS2 += 1
+    elif T2[i] == 0 and temp >= .5:
+        MLS2 += 1
+
+
 if(N2 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -373,7 +392,6 @@ print("Least Squares Weight Vectors:",np.transpose(LSW2))
 print("Least Squares Misclassifications:",MLS2)
 
 plt.figure(5)
-#X2P = np.array([0,1,2,3,4,5,6,7])
 for i in range(len(Data)):
     if T2[i] == 1:
         plt.plot(Data[i].getM3(),Data[i].getM4(),'ro')
@@ -384,7 +402,7 @@ X1Range2 = np.linspace(1, 7)
 X2Range2 = np.linspace(0, 2.5)
 
 BY2 = (-1.0*(BW2[2]+BW2[1]*X2[:,0])) / BW2[0]
-LY2 = LSW2[0]*X2Range2 + LSW2[1]*X1Range2 + LSW2[2] + .5
+LY2 = LSW2[1]*X2Range2 + LSW2[0]*X1Range2 + LSW2[2] + .5
 
 plt.plot(X2[:,0],BY2,label = "Batch Perceptron",color = "green")
 plt.plot(X1Range2,LY2,label = "Least Sqaures" ,color = "blue")
@@ -414,7 +432,17 @@ print("Virgi VS Versi+Setosa : All Features")
 BW3,N3 = BatchPerceptron(X3,T3,.1)
 LSW3 = LeastSquares(X3,T3)
 MBW3 = Misclassified(X3,BW3,T3)
-MLS3 = LSMiss(X3,LSW3,T3)
+
+
+MLS3 = 0
+for i in range(len(X3)):
+    temp = X3[i][0] * LSW3[0] + X3[i][1] * LSW3[1] +  X3[i][2] * LSW3[2] + X3[i][3] * LSW3[3] + LSW3[4]
+
+    if T3[i] == 1 and temp < .5:
+        MLS3 += 1
+    elif T3[i] == 0 and temp >= .5:
+        MLS3 += 1
+
 if(N3 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -438,7 +466,16 @@ print("Virgi VS Versi+Setosa: Features 3 and 4")
 BW4,N4 = BatchPerceptron(X4,T4,.0001)
 LSW4 = LeastSquares(X4,T4)
 MBW4 = Misclassified(X4,BW4,T4)
-MLS4 = LSMiss(X4,LSW4,T4)
+
+MLS4 = 0
+for i in range(len(X4)):
+    temp = X4[i][0] * LSW4[0] + X4[i][1] * LSW4[1] + LSW4[2]
+
+    if T4[i] == 1 and temp < .5:
+        MLS4 += 1
+    elif T4[i] == 0 and temp >= .5:
+        MLS4 += 1
+
 if(N4 != 1000):
     print("Batch Perceptron Converged!")
 else:
@@ -461,7 +498,7 @@ for i in range(len(Data)):
 X2Range4 = np.linspace(0, 2)
 
 BY4 = (-1.0*(BW4[2]+BW4[1]*X4[:,0])) / BW4[0]
-LY4 = LSW4[0]*X2Range4 + LSW4[1]*X1Range2 + LSW4[2] + .5
+LY4 = LSW4[1]*X2Range4 + LSW4[0]*X1Range2 + LSW4[2] + .5
 
 plt.plot(X4[:,0],BY4,label = "Batch Perceptron",color = "green")
 plt.plot(X1Range2,LY4,label = "Least Sqaures" ,color = "blue")
@@ -486,33 +523,16 @@ for i in range(len(Data)):
         T5 = np.append(T5,np.array([[0,0,1]]),0)   
 #print(T3)
 X1Range5 = np.linspace(0, 8)
-X2Range5 = np.linspace(0, 2)
 
 LSW5 = LeastSquares(X5,T5)
-# MBW4 = Misclassified(X4,BW4,T4)
-# MLS4 = LSMiss(X4,LSW4,T4)
-print(LSW5)
-d1 = LSW5[0][0]*X2Range5 + LSW5[1][0]*X1Range5 + LSW5[2][0] +.5
-d2 = LSW5[0][1]*X2Range5 + LSW5[1][1]*X1Range5 + LSW5[2][1] +.5
-d3 = LSW5[0][2]*X2Range5 + LSW5[1][2]*X1Range5 + LSW5[2][2] +.5
 
-# d1 = LSW5[0][0]*X2Range2 + LSW5[0][1]*X1Range2 + LSW5[0][2] 
-# d2 = LSW5[1][0]*X2Range2 + LSW5[1][1]*X1Range2 + LSW5[1][2] 
-# d3 = LSW5[2][0]*X2Range2 + LSW5[2][1]*X1Range2 + LSW5[2][2] 
-LY4 = LSW4[0]*X2Range4 + LSW4[1]*X1Range2 + LSW4[2] + .5
-print(d1)
-print(d2)
-print(d3)
-#print(d1)
-#LY51 = (X1Range5*(LSW5[0][0]-LSW5[0][1])) + (X1Range5*(LSW5[1][0]-LSW5[1][1])) + (LSW5[2][0]-LSW5[2][1])
-LY51 = d1 - d2
-LY52 = d2 - d1
-LY53 = d3 - d2
-print(LY51)
-# print("Virgi VS Versi VS Setosa: Features 3 and 4")
-# print("Least Squares Weight Vectors Setosa VS Versicolor:",np.transpose(LSW51))
-# print("Least Squares Weight Vectors Setosa VS Virginica:",np.transpose(LSW52))
-# print("Least Squares Weight Vectors Versicolor VS Virginica:",np.transpose(LSW53))
+LY51 = (X1Range5*(LSW5[0][1]-LSW5[0][0])+(LSW5[2][1]-LSW5[2][0]))/(LSW5[1][0]-LSW5[1][1])
+LY52 = (X1Range5*(LSW5[0][2]-LSW5[0][0])+(LSW5[2][2]-LSW5[2][0]))/(LSW5[1][0]-LSW5[1][2])
+LY53 = (X1Range5*(LSW5[0][2]-LSW5[0][1])+(LSW5[2][2]-LSW5[2][1]))/(LSW5[1][1]-LSW5[1][2])
+
+print("Virgi VS Versi VS Setosa: Features 3 and 4")
+print("Least Squares Weight Vectors Setosa VS Versicolor VS Virginica:\n",np.transpose(LSW5))
+
 # print("Least Squares Misclassifications Setosa VS Versicolor:",MLS51)
 # print("Least Squares Misclassifications Setosa VS Virginica:",MLS52)
 # print("Least Squares Misclassifications Versicolor VS Virginica:",MLS53)
@@ -528,9 +548,9 @@ for i in range(len(Data)):
     elif Data[i].getName() == "virginica":
         plt.plot(Data[i].getM3(),Data[i].getM4(),'go')
 
-plt.plot(X1Range5,d1,label = "Setosa VS Versi" ,color = "blue")
-plt.plot(X1Range5,d2,label = "Setosa VS Virgi" ,color = "green")
-plt.plot(X1Range5,d3,label = "Versi VS Virgi" ,color = "red")
+plt.plot(X1Range5,LY51,label = "Setosa VS Versi" ,color = "blue")
+plt.plot(X1Range5,LY52,label = "Setosa VS Virgi" ,color = "green")
+plt.plot(X1Range5,LY53,label = "Versi VS Virgi" ,color = "red")
 
 
 plt.xlabel('Pedal Length')
