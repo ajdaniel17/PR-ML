@@ -332,7 +332,7 @@ for i in range(len(Data)):
 #print(Y1)
 
 print("Setosa VS Versi+Virigi : All Features")
-BW1,N1 = BatchPerceptron(X1,T1,.1)
+BW1,N1 = BatchPerceptron(X1,T1,.01)
 LSW1 = LeastSquares(X1,T1)
 MBW1 = Misclassified(X1,BW1,T1)
 MLS1 = LSMiss(X1,LSW1,T1)
@@ -474,62 +474,49 @@ leg = plt.legend(loc='upper right')
 print("\n\n")
 #Setosa Vs Versi Vs Virigi
 
-X51 = np.empty((0,3),float)
-for i in range(len(Data)):
-    if Data[i].getName() == "setosa" or Data[i].getName() == "versicolor":
-        X51 = np.append(X51,np.array([[Data[i].getM3(),Data[i].getM4(),1]]),0)
+X5 = X4
 
-T51 = np.empty((0,1),float)
+T5 = np.empty((0,3),float)
 for i in range(len(Data)):
     if Data[i].getName() == "setosa":
-        T51 = np.append(T51,np.array([[1]]),0)
+        T5 = np.append(T5,np.array([[1,0,0]]),0)
     elif Data[i].getName() == "versicolor":
-        T51 = np.append(T51,np.array([[0]]),0)
- 
-
-X52 = np.empty((0,3),float)
-for i in range(len(Data)):
-    if Data[i].getName() == "setosa" or Data[i].getName() == "virginica":
-        X52 = np.append(X52,np.array([[Data[i].getM3(),Data[i].getM4(),1]]),0)
-
-T52 = np.empty((0,1),float)
-for i in range(len(Data)):
-    if Data[i].getName() == "setosa":
-        T52 = np.append(T52,np.array([[1]]),0)
+        T5 = np.append(T5,np.array([[0,1,0]]),0)
     elif Data[i].getName() == "virginica":
-        T52 = np.append(T52,np.array([[0]]),0)
+        T5 = np.append(T5,np.array([[0,0,1]]),0)   
+#print(T3)
+X1Range5 = np.linspace(0, 8)
+X2Range5 = np.linspace(0, 2)
 
+LSW5 = LeastSquares(X5,T5)
+# MBW4 = Misclassified(X4,BW4,T4)
+# MLS4 = LSMiss(X4,LSW4,T4)
+print(LSW5)
+d1 = LSW5[0][0]*X2Range5 + LSW5[1][0]*X1Range5 + LSW5[2][0] +.5
+d2 = LSW5[0][1]*X2Range5 + LSW5[1][1]*X1Range5 + LSW5[2][1] +.5
+d3 = LSW5[0][2]*X2Range5 + LSW5[1][2]*X1Range5 + LSW5[2][2] +.5
 
-X53 = np.empty((0,3),float)
-for i in range(len(Data)):
-    if Data[i].getName() == "versicolor" or Data[i].getName() == "virginica":
-        X53 = np.append(X53,np.array([[Data[i].getM3(),Data[i].getM4(),1]]),0)
+# d1 = LSW5[0][0]*X2Range2 + LSW5[0][1]*X1Range2 + LSW5[0][2] 
+# d2 = LSW5[1][0]*X2Range2 + LSW5[1][1]*X1Range2 + LSW5[1][2] 
+# d3 = LSW5[2][0]*X2Range2 + LSW5[2][1]*X1Range2 + LSW5[2][2] 
+LY4 = LSW4[0]*X2Range4 + LSW4[1]*X1Range2 + LSW4[2] + .5
+print(d1)
+print(d2)
+print(d3)
+#print(d1)
+#LY51 = (X1Range5*(LSW5[0][0]-LSW5[0][1])) + (X1Range5*(LSW5[1][0]-LSW5[1][1])) + (LSW5[2][0]-LSW5[2][1])
+LY51 = d1 - d2
+LY52 = d2 - d1
+LY53 = d3 - d2
+print(LY51)
+# print("Virgi VS Versi VS Setosa: Features 3 and 4")
+# print("Least Squares Weight Vectors Setosa VS Versicolor:",np.transpose(LSW51))
+# print("Least Squares Weight Vectors Setosa VS Virginica:",np.transpose(LSW52))
+# print("Least Squares Weight Vectors Versicolor VS Virginica:",np.transpose(LSW53))
+# print("Least Squares Misclassifications Setosa VS Versicolor:",MLS51)
+# print("Least Squares Misclassifications Setosa VS Virginica:",MLS52)
+# print("Least Squares Misclassifications Versicolor VS Virginica:",MLS53)
 
-T53 = np.empty((0,1),float)
-for i in range(len(Data)):
-    if Data[i].getName() == "versicolor":
-        T53 = np.append(T53,np.array([[1]]),0)
-    elif Data[i].getName() == "virginica":
-        T53 = np.append(T53,np.array([[0]]),0)
-
-LSW51 = LeastSquares(X51,T51)
-LSW52 = LeastSquares(X52,T52)
-LSW53= LeastSquares(X53,T53)
-MLS51 = 0
-MLS52 = 0
-MLS53 = 50
-
-print("Virgi VS Versi VS Setosa: Features 3 and 4")
-print("Least Squares Weight Vectors Setosa VS Versicolor:",np.transpose(LSW51))
-print("Least Squares Weight Vectors Setosa VS Virginica:",np.transpose(LSW52))
-print("Least Squares Weight Vectors Versicolor VS Virginica:",np.transpose(LSW53))
-print("Least Squares Misclassifications Setosa VS Versicolor:",MLS51)
-print("Least Squares Misclassifications Setosa VS Virginica:",MLS52)
-print("Least Squares Misclassifications Versicolor VS Virginica:",MLS53)
-
-LY51 = LSW51[0]*X2Range4 + LSW51[1]*X1Range2 + LSW51[2] 
-LY52 = LSW52[0]*X2Range4 + LSW52[1]*X1Range2 + LSW52[2] 
-LY53 = LSW53[0]*X2Range4 + LSW53[1]*X1Range2 + LSW53[2] 
 
 plt.figure(7)
 
@@ -541,9 +528,9 @@ for i in range(len(Data)):
     elif Data[i].getName() == "virginica":
         plt.plot(Data[i].getM3(),Data[i].getM4(),'go')
 
-plt.plot(X1Range2,LY51,label = "Setosa VS Versi" ,color = "blue")
-plt.plot(X1Range2,LY52,label = "Setosa VS Virgi" ,color = "green")
-plt.plot(X1Range2,LY53,label = "Versi VS Virgi" ,color = "red")
+plt.plot(X1Range5,d1,label = "Setosa VS Versi" ,color = "blue")
+plt.plot(X1Range5,d2,label = "Setosa VS Virgi" ,color = "green")
+plt.plot(X1Range5,d3,label = "Versi VS Virgi" ,color = "red")
 
 
 plt.xlabel('Pedal Length')

@@ -79,14 +79,36 @@ Y = np.array([[1],
               [0],
               [0]])
 
+
+X2 = np.array([[1,1,1],
+              [2,1,1],
+              [4,5,1],
+              [8,9,1]])
+
+Y3 = np.array([[1,0,0],
+              [1,0,0],
+              [0,1,0],
+              [0,0,1]])
+
 W1, N1= BatchPerceptron(X,Y)
 #print("Batch Perceptron Weight Vectors: ",W1)
 
 W2 = LeastSquares(X,Y)
-#print("Least Squares Weight Vectors: ",W2)
 
+W3 = LeastSquares(X2,Y3)
+
+#print("Least Squares Weight Vectors: ",W2)
 X1Range = np.linspace(0, 9)
 X2Range = np.linspace(0, 9)
+
+#testvalues = W3[0][0]*X2Range + W3[1][0]*X1Range + W3[2][0]
+d1 = W3[0][0]*X2Range + W3[1][0]*X1Range + W3[2][0] +.5
+d2 = W3[0][1]*X2Range + W3[1][1]*X1Range + W3[2][1] +.5
+d3 = W3[0][2]*X2Range + W3[1][2]*X1Range + W3[2][2] +.5
+
+Y4 = d2 - d1
+Y5 = d1 - d3
+Y6 = d3 - d2
 
 Y2 = W2[0]*X2Range + W2[1]*X1Range + W2[2] + .5
 
@@ -94,8 +116,9 @@ Predict = np.matmul(X,W2)
 
 Y1 = (-1.0*(W1[2]+W1[1]*X[:,0]))/W1[0]
 
-print(Predict)
-
+#print(Predict)
+print(W3)
+print(W2)
 #print(Y2)
 Num1 = Misclassified(X,W1,Y)
 Num2 = Misclassified(X,W2,Y)
@@ -113,6 +136,9 @@ for i in range(len(Y)):
 #plt.plot(Xreal,Y2,'y')
 plt.plot(X[:,0],Y1,'g:',label = "Batch Perceptron")
 plt.plot(X1Range,Y2,'b:',label = "Least Sqaures")
+plt.plot(X1Range,d1,'r',label = "Least Sqaures MUlti1")
+plt.plot(X1Range,d2,'b',label = "Least Sqaures MUlti2")
+plt.plot(X1Range,d3,'g',label = "Least Sqaures MUlti3")
 #plt.plot(line_x, Y2)
 leg = plt.legend(loc='upper right')
 plt.draw()
