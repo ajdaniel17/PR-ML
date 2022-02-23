@@ -102,9 +102,9 @@ X1Range = np.linspace(0, 9)
 X2Range = np.linspace(0, 9)
 
 #testvalues = W3[0][0]*X2Range + W3[1][0]*X1Range + W3[2][0]
-d1 = W3[0][0]*X2Range + W3[1][0]*X1Range + W3[2][0] +.5
-d2 = W3[0][1]*X2Range + W3[1][1]*X1Range + W3[2][1] +.5
-d3 = W3[0][2]*X2Range + W3[1][2]*X1Range + W3[2][2] +.5
+d1 = W3[0][0]*X2Range + W3[1][0]*X1Range + W3[2][0] 
+d2 = W3[0][1]*X2Range + W3[1][1]*X1Range + W3[2][1] 
+d3 = W3[0][2]*X2Range + W3[1][2]*X1Range + W3[2][2] 
 
 Y4 = d2 - d1
 Y5 = d1 - d3
