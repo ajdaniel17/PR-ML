@@ -38,10 +38,8 @@ def BatchPerceptron(X,T):
             Num += 100
         for i in range(Xrows):
             for j in range(len(W)):
-                if ((j+2) <= len(W)):
-                    temp += float(X[i][j])*W[(len(W)-(j+2))]
-                else:
-                    temp += float(X[i][j])*W[j]
+                temp += float(X[i][j])*W[j]
+
             if(temp > 0 and T[i] == 0):
                 MissX += X[i,:]*-1.0
             elif(temp <= 0 and T[i] == 1 or temp == 1):
@@ -114,7 +112,7 @@ Y2 = W2[0]*X2Range + W2[1]*X1Range + W2[2] + .5
 
 Predict = np.matmul(X,W2) 
 
-Y1 = (-1.0*(W1[2]+W1[1]*X[:,0]))/W1[0]
+Y1 = (-1.0*(W1[2]+W1[0]*X1Range))/W1[1]
 
 #print(Predict)
 print(W3)
@@ -134,7 +132,7 @@ for i in range(len(Y)):
         plt.plot(X[i][0],X[i][1],'bx')
         
 #plt.plot(Xreal,Y2,'y')
-plt.plot(X[:,0],Y1,'g:',label = "Batch Perceptron")
+plt.plot(X1Range,Y1,'g:',label = "Batch Perceptron")
 plt.plot(X1Range,Y2,'b:',label = "Least Sqaures")
 plt.plot(X1Range,Y4,'r',label = "Least Sqaures MUlti1")
 #plt.plot(X1Range,Y5,'b',label = "Least Sqaures MUlti2")

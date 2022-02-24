@@ -116,10 +116,8 @@ def BatchPerceptron(X,T,L):
             Num += 100
         for i in range(Xrows):
             for j in range(len(W)):
-                if ((j+2) <= len(W)):
-                    temp += float(X[i][j])*W[(len(W)-(j+2))]
-                else:
-                    temp += float(X[i][j])*W[j]
+                temp += float(X[i][j])*W[j]
+                
             if(temp > 0 and T[i] == 0):
                 MissX += X[i,:]*-1.0
             elif(temp <= 0 and T[i] == 1 or temp == 1):
@@ -145,11 +143,7 @@ def Misclassified(X,W,T):
     B = 0
     for N in range(Xrows):
         for j in range(len(W)):
-
-            if ((j+2) <= len(W)):
-                temp += float(X[N][j])*W[(len(W)-(j+2))]
-            else:
-                temp += float(X[N][j])*W[j]
+            temp += float(X[N][j])*W[j]
         if(temp > 0 and T[N] == 0):
                 B += 1 
         elif(temp <= 0 and T[N] == 1):
@@ -332,7 +326,7 @@ for i in range(len(Data)):
 #print(Y1)
 
 print("Setosa VS Versi+Virigi : All Features")
-BW1,N1 = BatchPerceptron(X1,T1,.0001)
+BW1,N1 = BatchPerceptron(X1,T1,.1)
 LSW1 = LeastSquares(X1,T1)
 MBW1 = Misclassified(X1,BW1,T1)
 
@@ -401,10 +395,10 @@ for i in range(len(Data)):
 X1Range2 = np.linspace(1, 7)
 X2Range2 = np.linspace(0, 2.5)
 
-BY2 = (-1.0*(BW2[2]+BW2[1]*X2[:,0])) / BW2[0]
+BY2 = (-1.0*(BW2[2]+BW2[0]*X1Range2))/BW2[1]
 LY2 = LSW2[1]*X2Range2 + LSW2[0]*X1Range2 + LSW2[2] + .5
 
-plt.plot(X2[:,0],BY2,label = "Batch Perceptron",color = "green")
+plt.plot(X1Range2,BY2,label = "Batch Perceptron",color = "green")
 plt.plot(X1Range2,LY2,label = "Least Sqaures" ,color = "blue")
 
 plt.xlabel('Pedal Length')
@@ -497,10 +491,10 @@ for i in range(len(Data)):
 
 X2Range4 = np.linspace(0, 2)
 
-BY4 = (-1.0*(BW4[2]+BW4[1]*X4[:,0])) / BW4[0]
+BY4 = (-1.0*(BW4[2]+BW4[0]*X1Range2))/BW4[1]
 LY4 = LSW4[1]*X2Range4 + LSW4[0]*X1Range2 + LSW4[2] + .5
 
-plt.plot(X4[:,0],BY4,label = "Batch Perceptron",color = "green")
+plt.plot(X1Range2,BY4,label = "Batch Perceptron",color = "green")
 plt.plot(X1Range2,LY4,label = "Least Sqaures" ,color = "blue")
 
 plt.xlabel('Pedal Length')
@@ -531,13 +525,24 @@ LY52 = (X1Range5*(LSW5[0][2]-LSW5[0][0])+(LSW5[2][2]-LSW5[2][0]))/(LSW5[1][0]-LS
 LY53 = (X1Range5*(LSW5[0][2]-LSW5[0][1])+(LSW5[2][2]-LSW5[2][1]))/(LSW5[1][1]-LSW5[1][2])
 
 print("Virgi VS Versi VS Setosa: Features 3 and 4")
-print("Least Squares Weight Vectors Setosa VS Versicolor VS Virginica:\n",np.transpose(LSW5))
+print("Least Squares Weight Vectors Setosa VS Versicolor VS Virginica:\n",LSW5)
+
+temp1 = np.array([0.0,0.0,0.0])
+tempplace = 0
+for i in range(len(Data)):
+    for d in range(3):
+        for j in range(3):
+
+            temp += X5[i][j]*LSW5[j][d]
+        temp1[d] = temp
+    tempplace = np.argmax(temp1)
+    # print(tempplace, temp1)
+
+
 
 # print("Least Squares Misclassifications Setosa VS Versicolor:",MLS51)
 # print("Least Squares Misclassifications Setosa VS Virginica:",MLS52)
 # print("Least Squares Misclassifications Versicolor VS Virginica:",MLS53)
-
-
 plt.figure(7)
 
 for i in range(len(Data)):
