@@ -49,9 +49,9 @@ for i in range(L):
 #print(Phi.shape)
 #print(Phi[0])
 
-lam = np.random.uniform(.01,10,300)
+lam = np.random.uniform(.01,5,300)
 lam = np.sort(lam)
-print(lam)
+#print(lam)
 I = np.identity(M+1)
 W = np.empty((0,L,(M+1)),float)
 # Setup all Weight Vectors
@@ -81,7 +81,7 @@ for j in range(len(Xrange)):
 
 
 plt.figure(1)
-numlam = 0
+numlam = 299
 for i in range(N):
     for j in range(L):
         plt.plot(X[j][i],T[j][i],'bo')
@@ -94,11 +94,11 @@ plt.figure(2)
 TruY = np.sin(2*Pi*Xrange)
 plt.plot(Xrange,TruY,'b')
 
-print(temp2.shape)
-print(W[0][i][:].shape)
+#print(temp2.shape)
+#print(W[0][i][:].shape)
 sum = np.zeros(500)
 for i in range(L):
     sum += np.matmul(temp2,W[numlam][i][:])
-sum = sum/500
+sum = sum/300
 plt.plot(Xrange,sum,'r')
 plt.show()
