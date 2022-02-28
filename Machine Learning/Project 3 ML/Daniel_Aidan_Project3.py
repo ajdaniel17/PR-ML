@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 np.random.seed(69)
 Pi = np.pi
 SD = .3
-L = 100 
+L = 100
 N = 25
 np.set_printoptions(threshold=np.inf)
 
@@ -27,8 +27,9 @@ M = 20
 
 Phi = np.empty((0,N,M+1),float)
 
-Mu = np.random.uniform(0,1,M)
-Mu = np.sort(Mu)
+#Mu = np.random.uniform(0,1,M)
+#Mu = np.sort(Mu)
+Mu = np.linspace(0, 1,M)
 s = .1
 
 #Setup all Phi
@@ -80,12 +81,24 @@ for j in range(len(Xrange)):
 
 
 plt.figure(1)
-
+numlam = 0
 for i in range(N):
-    for j in range(L):
+    for j in range(1):
         plt.plot(X[j][i],T[j][i],'bo')
 # for i in range(1):
 #     plt.plot(X[i][:],np.matmul(Phi[i][:][:],W[0][i][:]))
-for i in range(20):
-    plt.plot(Xrange,np.matmul(temp2,W[9][i][:]),'r')
+for i in range(L):
+    plt.plot(Xrange,np.matmul(temp2,W[numlam][i][:]),'r')
+
+plt.figure(2)
+TruY = np.sin(2*Pi*Xrange)
+plt.plot(Xrange,TruY,'b')
+
+print(temp2.shape)
+print(W[0][i][:].shape)
+sum = np.zeros(500)
+for i in range(L):
+    sum += np.matmul(temp2,W[numlam][i][:])
+sum = sum/500
+plt.plot(Xrange,sum,'r')
 plt.show()
