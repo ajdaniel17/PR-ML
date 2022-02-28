@@ -27,11 +27,11 @@ M = 20
 
 Phi = np.empty((0,N,M+1),float)
 
-#Mu = np.random.uniform(0,1,M)
+Mu = np.random.uniform(0,1,M)
 #Mu = np.sort(Mu)
-Mu = np.linspace(0, 1,M)
+#Mu = np.linspace(0, 1,M)
 s = .1
-print(Mu)
+#print(Mu)
 #Setup all Phi
 for i in range(L):
     temp2 = np.empty((0,(M+1)),float)
@@ -49,9 +49,9 @@ for i in range(L):
 #print(Phi.shape)
 #print(Phi[0])
 
-lam = np.random.uniform(.01,5,10)
+lam = np.random.uniform(.01,10,300)
 lam = np.sort(lam)
-
+print(lam)
 I = np.identity(M+1)
 W = np.empty((0,L,(M+1)),float)
 # Setup all Weight Vectors
@@ -59,7 +59,7 @@ W = np.empty((0,L,(M+1)),float)
 for i in range(len(lam)):
     temp1 = np.empty((0,(M+1)),float)
     for j in range(L):
-        temp =  np.matmul(np.matmul(np.linalg.inv(np.matmul(np.transpose(Phi[L-1][:][:]),Phi[L-1][:][:])+lam[i]*I),np.transpose(Phi[L-1][:][:])),T[j][:])
+        temp =  np.matmul(np.matmul(np.linalg.inv(np.matmul(np.transpose(Phi[j][:][:]),Phi[j][:][:])+lam[i]*I),np.transpose(Phi[j][:][:])),T[j][:])
         #print(temp.shape)
         temp1 = np.append(temp1,np.array([temp]),0)
     W = np.append(W,np.array([temp1]),0)
@@ -83,7 +83,7 @@ for j in range(len(Xrange)):
 plt.figure(1)
 numlam = 0
 for i in range(N):
-    for j in range(1):
+    for j in range(L):
         plt.plot(X[j][i],T[j][i],'bo')
 # for i in range(1):
 #     plt.plot(X[i][:],np.matmul(Phi[i][:][:],W[0][i][:]))
