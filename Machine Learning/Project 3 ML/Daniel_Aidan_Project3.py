@@ -31,7 +31,7 @@ Phi = np.empty((0,N,M+1),float)
 #Mu = np.sort(Mu)
 Mu = np.linspace(0, 1,M)
 s = .1
-
+print(Mu)
 #Setup all Phi
 for i in range(L):
     temp2 = np.empty((0,(M+1)),float)
