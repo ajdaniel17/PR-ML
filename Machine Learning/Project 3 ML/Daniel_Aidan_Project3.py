@@ -64,7 +64,7 @@ for i in range(len(lam)):
         #print(temp.shape)
         temp1 = np.append(temp1,np.array([temp]),0)
     W = np.append(W,np.array([temp1]),0)
-print(W.shape)
+
 
 Fhat = np.empty((0,M+1),float)
 
@@ -75,6 +75,21 @@ for i in range(lamamount):
     temp = temp * float(1.0/L)
     Fhat = np.append(Fhat,np.array([temp]),0)
 
+bias = np.empty((0),float)
+
+for i in range(lamamount):
+    temp = 0
+    temp2 = 0
+    temp3 = 0
+    for j in range(L):
+        temp = np.matmul(Fhat[i][:],np.transpose(Phi[j]))
+        for k in range(N):
+            temp2 += (temp[k] - (np.sin(2*Pi*X[j][k])))**2
+        temp2 = temp2 / float(N)
+        temp3 += temp2
+    temp3 = temp3 / float(L)
+    bias = np.append(bias,temp3)
+print(bias)
 
 Xrange = np.linspace(0, 1,500)
 
@@ -93,21 +108,29 @@ for j in range(len(Xrange)):
 
 
 plt.figure(1)
-numlam = 299
-for i in range(N):
-    for j in range(L):
-        plt.plot(X[j][i],T[j][i],'bo')
-# for i in range(1):
-#     plt.plot(X[i][:],np.matmul(Phi[i][:][:],W[0][i][:]))
-for i in range(20):
-    plt.plot(Xrange,np.matmul(temp2,W[numlam][i][:]),'r')
 
-plt.figure(2)
-TruY = np.sin(2*Pi*Xrange)
-plt.plot(Xrange,TruY,'b')
+plt.plot(np.log(lam),bias,label = '(bias)²')
 
-#print(temp2.shape)
-#print(W[0][i][:].shape)
+plt.xlim(-3,2)
+plt.ylim(0,.15)
+plt.xlabel('ln λ')
 
-plt.plot(Xrange,np.matmul(temp2,Fhat[numlam][:]),'r')
+leg = plt.legend(loc='upper right')
+
+
+# plt.figure(2)
+# numlam = 299
+# for i in range(N):
+#     for j in range(L):
+#         plt.plot(X[j][i],T[j][i],'bo')
+
+# for i in range(20):
+#     plt.plot(Xrange,np.matmul(temp2,W[numlam][i][:]),'r')
+
+# plt.figure(3)
+# TruY = np.sin(2*Pi*Xrange)
+# plt.plot(Xrange,TruY,'b')
+
+# plt.plot(Xrange,np.matmul(temp2,Fhat[numlam][:]),'r')
+
 plt.show()
