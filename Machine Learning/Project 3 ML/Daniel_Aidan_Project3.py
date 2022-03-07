@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Initializing Values
-np.random.seed(5)
+np.random.seed(69)
 Pi = np.pi
 SD = .3
 L = 100
