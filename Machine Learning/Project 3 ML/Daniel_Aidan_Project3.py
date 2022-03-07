@@ -19,7 +19,7 @@ for i in range(L):
 #Setup Target Values
 T = np.empty((0,N),float)
 for i in range(L):
-    EX1 = np.random.normal(SD,np.mean(X[i][:]),N)
+    EX1 = np.random.normal(0,SD,N)
     temp = np.sin(2*Pi*X[i][:])  + EX1
     T = np.append(T,np.array([temp]),0)
 #print(T.shape)
