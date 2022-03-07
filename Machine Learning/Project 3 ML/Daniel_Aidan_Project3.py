@@ -29,10 +29,11 @@ Phi = np.empty((0,N,M+1),float)
 
 Mu = np.random.uniform(0,1,M)
 #Mu = np.sort(Mu)
-#Mu = np.linspace(0, 1,M)
+# Mu = np.linspace(0, 1,M)
 s = .1
 #print(Mu)
 #Setup all Phi
+
 for i in range(L):
     temp2 = np.empty((0,(M+1)),float)
     for j in range(N):
@@ -48,8 +49,8 @@ for i in range(L):
     Phi = np.append(Phi,np.array([temp2]),0)
 #print(Phi.shape)
 #print(Phi[0])
-
-lam = np.random.uniform(.01,5,300)
+lamamount = 300
+lam = np.random.uniform(.01,5,lamamount)
 lam = np.sort(lam)
 #print(lam)
 I = np.identity(M+1)
@@ -63,12 +64,23 @@ for i in range(len(lam)):
         #print(temp.shape)
         temp1 = np.append(temp1,np.array([temp]),0)
     W = np.append(W,np.array([temp1]),0)
-#print(W.shape)
+print(W.shape)
+
+Fhat = np.empty((0,M+1),float)
+
+for i in range(lamamount):
+    temp = np.zeros(M+1)
+    for j in range(L):
+        temp += W[i][j][:]
+    temp = temp * float(1.0/L)
+    Fhat = np.append(Fhat,np.array([temp]),0)
+
 
 Xrange = np.linspace(0, 1,500)
 
 
 temp2 = np.empty((0,(M+1)),float)
+
 for j in range(len(Xrange)):
         temp = np.empty((0),float)
         for k in range(M+1):
@@ -87,7 +99,7 @@ for i in range(N):
         plt.plot(X[j][i],T[j][i],'bo')
 # for i in range(1):
 #     plt.plot(X[i][:],np.matmul(Phi[i][:][:],W[0][i][:]))
-for i in range(L):
+for i in range(20):
     plt.plot(Xrange,np.matmul(temp2,W[numlam][i][:]),'r')
 
 plt.figure(2)
@@ -96,9 +108,6 @@ plt.plot(Xrange,TruY,'b')
 
 #print(temp2.shape)
 #print(W[0][i][:].shape)
-sum = np.zeros(500)
-for i in range(L):
-    sum += np.matmul(temp2,W[numlam][i][:])
-sum = sum/300
-plt.plot(Xrange,sum,'r')
+
+plt.plot(Xrange,np.matmul(temp2,Fhat[numlam][:]),'r')
 plt.show()
