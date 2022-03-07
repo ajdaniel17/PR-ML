@@ -39,7 +39,12 @@ print(Phi.shape)
 
 W = np.matmul(np.matmul(np.linalg.inv(np.matmul(np.transpose(Phi),Phi)+lamda*I),np.transpose(Phi)),t)
 
-print(W)
+#print(W)
+
+A = np.random.randint(0, 10, size=(100, 25, 21))
+B = np.random.randint(0, 10, size=(300, 100, 21))
+
+print(np.matmul(A,np.transpose(B)).shape)
 plt.plot(1)
 
 for i in range(3):
