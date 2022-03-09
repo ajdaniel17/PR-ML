@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cvxopt as cv
-
+#https://xavierbourretsicotte.github.io/SVM_implementation.html
 DataX = np.array([[1,1],
                   [1,-1],
                   [2,1],
