@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+np.set_printoptions(suppress=True)
+
 
 #Import Data From Proj3Train100.xlsx
 ED = pd.read_excel("Proj3Train100.xlsx",header=None)
@@ -54,7 +56,7 @@ print("Total Error:", Tot/float(len(TestX)))
 
 
 
-#Import Data From Proj3Train1000.xlsx
+# Import Data From Proj3Train1000.xlsx
 ED = pd.read_excel("Proj3Train1000.xlsx",header=None)
 index = ED.index
 rows = len(index)
