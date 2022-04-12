@@ -58,11 +58,11 @@ Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
 
 temp1 = np.zeros(5)
 temp2 = np.zeros(5)
-for i in range(50):
+for i in range(int(len(DataX)/2)):
     temp1 += (DataX[i] - Mean1)**2
-    temp2 += (DataX[i+50] - Mean2)**2
-Var1 = np.sqrt(temp1 /50.0)
-Var2 = np.sqrt(temp2 /50.0)
+    temp2 += (DataX[i+int(len(DataX)/2)] - Mean2)**2
+Var1 = np.sqrt(temp1 /float(len(DataX)/2))
+Var2 = np.sqrt(temp2 /float(len(DataX)/2))
 
 G1 = np.ones(int(len(TestX)))
 G2 = np.ones(int(len(TestX)))
@@ -140,11 +140,11 @@ Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
 
 temp1 = np.zeros(5)
 temp2 = np.zeros(5)
-for i in range(500):
+for i in range(int(len(DataX)/2)):
     temp1 += (DataX[i] - Mean1)**2
-    temp2 += (DataX[i+500] - Mean2)**2
-Var1 = np.sqrt(temp1 /500.0)
-Var2 = np.sqrt(temp2 /500.0)
+    temp2 += (DataX[i+int(len(DataX)/2)] - Mean2)**2
+Var1 = np.sqrt(temp1 /float(len(DataX)/2))
+Var2 = np.sqrt(temp2 /float(len(DataX)/2))
 
 
 G1 = np.ones(int(len(TestX)))
