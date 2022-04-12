@@ -3,6 +3,26 @@ import pandas as pd
 
 np.set_printoptions(suppress=True)
 
+#Setup True Model parameters
+TruCov1 = np.array([[.8,.2,.1,.05,.01],
+                    [.2,.7,.1,.03,.02],
+                    [.1,.1,.8,.02,.01],
+                    [.05,.03,.02,.9,.01],
+                    [.01,.02,.01,.01,.8]])
+
+TruCov2 = np.array([[.9,.1,.05,.02,.01],
+                    [.1,.8,.1,.02,.02],
+                    [.05,.1,.7,.02,.01],
+                    [.02,.02,.02,.6,.02],
+                    [.01,.02,.01,.02,.7]])
+
+TruMean1 = np.zeros(5)
+TruMean2 = np.ones(5)
+
+#Function to find PDF of a Gaussian distribution
+def NormalPDF(X,MEAN,VAR):
+    return ((1/(VAR*np.sqrt(2*np.pi)))*(np.exp(-.5*(((X-MEAN)/(VAR))**2))))
+
 
 #Import Data From Proj3Train100.xlsx
 ED = pd.read_excel("Proj3Train100.xlsx",header=None)
@@ -30,12 +50,37 @@ for i in range(rows):
         TestX = np.append(TestX,np.array([[ED.iat[i,0],ED.iat[i,1],ED.iat[i,2],ED.iat[i,3],ED.iat[i,4]]]),0)
         TestC = np.append(TestC, ED.iat[i,5])
 
+print("For N-Train = 100")
 
+#Naive Bayes Classifier 
+Var1 = np.var(DataX[0:int(len(DataX)/2)],axis = 0)
+Var2 = np.var(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
+
+Mean1 = np.mean(DataX[0:int(len(DataX)/2)],axis = 0)
+Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
+
+G1 = np.ones(int(len(TestX)))
+G2 = np.ones(int(len(TestX)))
+for i in range(len(TestX)):
+    for j in range(5):
+        G1[i] = G1[i] * (NormalPDF(TestX[i][j],Mean1[j],Var1[j]) * .5)
+        G2[i] = G2[i] * (NormalPDF(TestX[i][j],Mean2[j],Var2[j]) * .5)
+
+Tot = 0
+for i in range(len(TestX)):
+    if G1[i] > G2[i] and TestC[i] == 2:
+        Tot += 1
+    if G1[i] < G2[i] and TestC[i] == 1:
+        Tot += 1
+
+print("Naive Bayes Classifier Error:", Tot/float(len(TestX)))
+
+#Bayes Classifier 
 Cov1 = np.cov(DataX[0:int(len(DataX)/2)],rowvar = False)
 Cov2 = np.cov(DataX[int(len(DataX)/2):int(len(DataX))],rowvar = False)
 
 Mean1 = np.mean(DataX[0:int(len(DataX)/2)],axis = 0)
-Mean2 = np.mean(DataX[0:int(len(DataX)/2):int(len(DataX))],axis = 0)
+Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
 
 G1 = np.empty(0,float)
 G2 = np.empty(0,float)
@@ -50,11 +95,26 @@ for i in range(len(TestX)):
     if G1[i] < G2[i] and TestC[i] == 1:
         Tot += 1
 
+print("Bayes Classifier using MLE Error:", Tot/float(len(TestX)))
 
-print("Total Error:", Tot/float(len(TestX)))
+#Find Error Using Bayes classifier using True Parameters
+G1 = np.empty(0,float)
+G2 = np.empty(0,float)
+for i in range (len(TestX)):
+    G1 = np.append(G1,(-.5 * TestX[i] @ (np.linalg.inv(TruCov1)) @ (TestX[i].T)) + (.5 * TestX[i] @ (np.linalg.inv(TruCov1)) @ TruMean1) + (.5 * (TruMean1.T) @ (np.linalg.inv(TruCov1)) @ (TestX[i].T)) - (.5 * (TruMean1.T) @ np.linalg.inv(TruCov1) @ TruMean1) + np.log(.5) + (5 * -.5 * np.log(2*np.pi)) - (.5 * np.linalg.det(TruCov1)))
+    G2 = np.append(G2,(-.5 * TestX[i] @ (np.linalg.inv(TruCov2)) @ (TestX[i].T)) + (.5 * TestX[i] @ (np.linalg.inv(TruCov2)) @ TruMean2) + (.5 * (TruMean2.T) @ (np.linalg.inv(TruCov2)) @ (TestX[i].T)) - (.5 * (TruMean2.T) @ np.linalg.inv(TruCov2) @ TruMean2) + np.log(.5) + (5 * -.5 * np.log(2*np.pi)) - (.5 * np.linalg.det(TruCov2)))
+
+Tot = 0
+for i in range(len(TestX)):
+    if G1[i] > G2[i] and TestC[i] == 2:
+        Tot += 1
+    if G1[i] < G2[i] and TestC[i] == 1:
+        Tot += 1
+
+print("Bayes Classifier using True Model Error:", Tot/float(len(TestX)))
 
 
-
+print("\nFor N-Train = 1000")
 
 # Import Data From Proj3Train1000.xlsx
 ED = pd.read_excel("Proj3Train1000.xlsx",header=None)
@@ -69,11 +129,35 @@ for i in range(rows):
         DataX = np.append(DataX,np.array([[ED.iat[i,0],ED.iat[i,1],ED.iat[i,2],ED.iat[i,3],ED.iat[i,4]]]),0)
         DataC = np.append(DataC, ED.iat[i,5])
 
+#Naive Bayes Classifier 
+Var1 = np.var(DataX[0:int(len(DataX)/2)],axis = 0)
+Var2 = np.var(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
+
+Mean1 = np.mean(DataX[0:int(len(DataX)/2)],axis = 0)
+Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
+
+G1 = np.ones(int(len(TestX)))
+G2 = np.ones(int(len(TestX)))
+for i in range(len(TestX)):
+    for j in range(5):
+        G1[i] = G1[i] * (NormalPDF(TestX[i][j],Mean1[j],Var1[j]) * .5)
+        G2[i] = G2[i] * (NormalPDF(TestX[i][j],Mean2[j],Var2[j]) * .5)
+
+Tot = 0
+for i in range(len(TestX)):
+    if G1[i] > G2[i] and TestC[i] == 2:
+        Tot += 1
+    if G1[i] < G2[i] and TestC[i] == 1:
+        Tot += 1
+
+print("Naive Bayes Classifier Error:", Tot/float(len(TestX)))
+
+#Bayes Classifier using MLE
 Cov1 = np.cov(DataX[0:int(len(DataX)/2)],rowvar = False)
 Cov2 = np.cov(DataX[int(len(DataX)/2):int(len(DataX))],rowvar = False)
 
 Mean1 = np.mean(DataX[0:int(len(DataX)/2)],axis = 0)
-Mean2 = np.mean(DataX[0:int(len(DataX)/2):int(len(DataX))],axis = 0)
+Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
 
 G1 = np.empty(0,float)
 G2 = np.empty(0,float)
@@ -88,5 +172,20 @@ for i in range(len(TestX)):
     if G1[i] < G2[i] and TestC[i] == 1:
         Tot += 1
 
+print("Bayes Classifier using MLE Error:", Tot/float(len(TestX)))
 
-print("Total Error:", Tot/float(len(TestX)))
+#Find Error Using Bayes classifier using True Parameters
+G1 = np.empty(0,float)
+G2 = np.empty(0,float)
+for i in range (len(TestX)):
+    G1 = np.append(G1,(-.5 * TestX[i] @ (np.linalg.inv(TruCov1)) @ (TestX[i].T)) + (.5 * TestX[i] @ (np.linalg.inv(TruCov1)) @ TruMean1) + (.5 * (TruMean1.T) @ (np.linalg.inv(TruCov1)) @ (TestX[i].T)) - (.5 * (TruMean1.T) @ np.linalg.inv(TruCov1) @ TruMean1) + np.log(.5) + (5 * -.5 * np.log(2*np.pi)) - (.5 * np.linalg.det(TruCov1)))
+    G2 = np.append(G2,(-.5 * TestX[i] @ (np.linalg.inv(TruCov2)) @ (TestX[i].T)) + (.5 * TestX[i] @ (np.linalg.inv(TruCov2)) @ TruMean2) + (.5 * (TruMean2.T) @ (np.linalg.inv(TruCov2)) @ (TestX[i].T)) - (.5 * (TruMean2.T) @ np.linalg.inv(TruCov2) @ TruMean2) + np.log(.5) + (5 * -.5 * np.log(2*np.pi)) - (.5 * np.linalg.det(TruCov2)))
+
+Tot = 0
+for i in range(len(TestX)):
+    if G1[i] > G2[i] and TestC[i] == 2:
+        Tot += 1
+    if G1[i] < G2[i] and TestC[i] == 1:
+        Tot += 1
+
+print("Bayes Classifier using True Model Error:", Tot/float(len(TestX)))
