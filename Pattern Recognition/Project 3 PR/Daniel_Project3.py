@@ -53,11 +53,16 @@ for i in range(rows):
 print("For N-Train = 100")
 
 #Naive Bayes Classifier 
-Var1 = np.var(DataX[0:int(len(DataX)/2)],axis = 0)
-Var2 = np.var(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
-
 Mean1 = np.mean(DataX[0:int(len(DataX)/2)],axis = 0)
 Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
+
+temp1 = np.zeros(5)
+temp2 = np.zeros(5)
+for i in range(50):
+    temp1 += (DataX[i] - Mean1)**2
+    temp2 += (DataX[i+50] - Mean2)**2
+Var1 = np.sqrt(temp1 /50.0)
+Var2 = np.sqrt(temp2 /50.0)
 
 G1 = np.ones(int(len(TestX)))
 G2 = np.ones(int(len(TestX)))
@@ -130,11 +135,17 @@ for i in range(rows):
         DataC = np.append(DataC, ED.iat[i,5])
 
 #Naive Bayes Classifier 
-Var1 = np.var(DataX[0:int(len(DataX)/2)],axis = 0)
-Var2 = np.var(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
-
 Mean1 = np.mean(DataX[0:int(len(DataX)/2)],axis = 0)
 Mean2 = np.mean(DataX[int(len(DataX)/2):int(len(DataX))],axis = 0)
+
+temp1 = np.zeros(5)
+temp2 = np.zeros(5)
+for i in range(50):
+    temp1 += (DataX[i] - Mean1)**2
+    temp2 += (DataX[i+50] - Mean2)**2
+Var1 = np.sqrt(temp1 /50.0)
+Var2 = np.sqrt(temp2 /50.0)
+
 
 G1 = np.ones(int(len(TestX)))
 G2 = np.ones(int(len(TestX)))
