@@ -168,7 +168,7 @@ time1 = []
 time2 = []
 N = []
 options = '-t 0'
-for i in range(10,200):
+for i in range(10,100):
     N.append(i)
     class1=np.random.multivariate_normal([1,3],[[1,0],[0,1]],math.ceil(i/2.0))
     class2=np.random.multivariate_normal([4,1],[[2,0],[0,2]],math.floor(i/2.0))

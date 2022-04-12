@@ -9,10 +9,16 @@ cv.solvers.options['reltol'] = 1e-10
 cv.solvers.options['feastol'] = 1e-10
 
 PI = np.pi
-def SoftSVM(X,Y,C,Lrange):
+def SoftSVM(X,Y,C,kernal):
     Xrows, Xcols = X.shape
+    Lrange = 1E-5
 
-    Xprim = np.empty((0,Xcols),float)
+    if kernal == 'gaussian':
+        K = np.zeros((Xrows, Xrows))
+        for i in range(Xrows):
+            for j in range(Xrows):
+                K[i,j] = np.exp((-1.0*np.linalg.norm(DataX[i]-DataX[j])**2)/(2*(sig)**2))
+    
     q = np.empty((0),float)
     b = np.zeros(1)
     G = np.identity(Xrows) * -1
@@ -20,11 +26,9 @@ def SoftSVM(X,Y,C,Lrange):
     A = Y
     
     for i in range(Xrows):
-        temp = Y[i] * X[i]
-        Xprim = np.append(Xprim,np.array([temp]),0)
         q = np.append(q,-1)
 
-    P = np.matmul(Xprim,np.transpose(Xprim)) * 1.0
+    P = cv.matrix(np.outer(Y,Y) * K)
     P = cv.matrix(P)
     q = cv.matrix(q)
     b = cv.matrix(b,(1,1),'d')
@@ -81,6 +85,7 @@ for i in range(rows):
         DataX = np.append(DataX,np.array([[ED.iat[i,0],ED.iat[i,1]]]),0)
         DataC = np.append(DataC, ED.iat[i,2])
 
+print(DataC)
 X1avg = np.average(DataX[:][0]) 
 X2avg = np.average(DataX[:][1]) 
 
@@ -88,19 +93,22 @@ sig = 1.75
 const = 1 / sig*np.sqrt(PI*2)
 DataY = np.empty((0,2),float)
 for i in range(rows):
-    DataY = np.append(DataY,np.array([[const*np.exp(-.5*((DataX[i][0]-X1avg)**2)/sig**2),const*np.exp(-.5*((DataX[i][1]-X2avg)**2)/sig**2)]]),0)
+    DataY = np.append(DataY,np.array([[np.exp((-1.0*np.linalg.norm(DataX[i][0]-1)**2)/(2*(sig)**2)),np.exp((-1.0*np.linalg.norm(DataX[i][1]+1)**2)/(2*(sig)**2))]]),0)
  
 
 #W1,B1,Lam2 = SoftSVM(DataX,DataC,10,.01)
 
-W1,B1,Lam2 = SoftSVM(DataY,DataC,10,.01)
+W1,B1,Lam2 = SoftSVM(DataY,DataC,10,'gaussian')
+print(W1)
+print(B1)
 
-
-x1 = np.linspace(-2, 8)
-x2 = -1*(((W1[0]*x1)+B1)/W1[1])
+delta = 0.025
+xrange = np.arange(-2.0, 8.0, delta)
+yrange = np.arange(-2.0, 6.0, delta)
+x, y = np.meshgrid(xrange, yrange)
+equation = W1[0]*x + W1[1]*y+B1
 plt.figure(1)
-
-plt.plot(x1,x2,'b',label= 'Decision Boundary')
+plt.contour(x, y, equation, [0])
 for i in range(len(DataX)):
     if DataC[i] == 1:
         plt.plot(DataX[i][0],DataX[i][1],'ro')
