@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 
 np.set_printoptions(suppress=True)
 np.random.seed(69)
@@ -33,7 +32,6 @@ W1 = np.random.rand(2,2)
 b1 = np.random.rand(2)
 
 plt.figure(1)
-
 graphX = []
 graphY = []
 for m in range(3000):
@@ -56,19 +54,12 @@ for m in range(3000):
     Y = 1/(1+np.exp(-1*A1))
 
     #Back Pass
-    L = np.empty((0,2),float)
-    for i in range(N):
-        temp = np.empty(0,float)
-        for j in range(2):
-            temp = np.append(temp,Y[j][i]-DataC[i][j]) 
-        L = np.append(L,np.array([temp]),0)
-    L = L.T
-    
+    L = Y-DataC.T
     E = .5 * np.sum(np.linalg.norm(L,axis=0)**2)
   
     W1 = W1 - LR*np.dot(L,Z0.T)
     b1 = b1 - LR*np.mean(L,axis=1)
-
+  
     delta1 = np.multiply(np.dot(W1.T,L),(np.multiply(Z0,(1-Z0))))
     W0 = W0 - LR*np.dot(delta1,DataX)
     b0 = b0 - LR*np.mean(delta1,axis=1)
@@ -76,16 +67,21 @@ for m in range(3000):
     #Graph Error
     graphX.append(m)
     graphY.append(E)
-    if m % 10 == 0:
+    if m % 100 == 0:
         plt.ion()
         plt.xlabel("Epochs")
         plt.ylabel("Error")
         plt.xlim(0,3001)
         plt.xticks(np.arange(0,3001,500))
         plt.semilogy(graphX,graphY)
-        plt.draw()
         plt.pause(.001)
         plt.clf()
+plt.ioff()
+plt.figure(1)
+plt.xlabel("Epochs")
+plt.ylabel("Error")
+plt.xlim(0,3001)
+plt.semilogy(graphX,graphY)
 
 plt.figure(2)
 ax = plt.axes(projection='3d')
@@ -108,5 +104,5 @@ ax.scatter(1,1,-1,color = 'r',s=200,alpha=1)
 ax.scatter(-1,-1,-1,color = 'r',s=200,alpha=1)
 ax.scatter(1,-1,1,color = 'b',s=200,alpha=1)
 ax.scatter(-1,1,1,color = 'b',s=200,alpha=1)
-plt.show()
 
+plt.show()
