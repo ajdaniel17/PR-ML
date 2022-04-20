@@ -4,17 +4,20 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 np.set_printoptions(suppress=True)
-
+np.random.seed(69)
 graphX = []
 graphY = []
 
+#Learning Rate
 LR = .3
 
+#Data
 DataX = np.array([[-1,-1],
                   [ 1, 1],
                   [-1, 1],
                   [ 1, -1]])
 
+#Targets
 DataC = np.array([[0,1],
                   [0,1],
                   [1,0],
@@ -22,39 +25,37 @@ DataC = np.array([[0,1],
 
 N,D = DataX.shape
 
-W0 = np.random.uniform(0,1,size=(2,2))
-b0 = np.random.uniform(0,1,size = 2)
+#Initialize random weights
+W0 = np.random.rand(2,2)
+b0 = np.random.rand(2)
 
-W1 = np.random.uniform(0,1,size=(2,2))
-b1 = np.random.uniform(0,1,size = 2)
+W1 = np.random.rand(2,2)
+b1 = np.random.rand(2)
 
 plt.figure(1)
 
-# # plt.ylim(.0001, .1)
-
-# plt.ticklabel_format(style='scientific', axis='y', scilimits=(0,0))
 graphX = []
 graphY = []
 for m in range(3000):
-
+    #Forward Pass Setup
     B0 = np.empty((0,D),float)
     for i in range(N):
         B0 = np.vstack([B0,b0])
     B0 = B0.T
-
-
+    
     B1 = np.empty((0,2),float)
     for i in range(N):
         B1 = np.vstack([B1,b1])
     B1 = B1.T
 
+    #Forward Pass
     A0 = np.dot(W0,DataX.T) + B0
     Z0 = 1/(1+np.exp(-1*A0))
 
     A1 = np.dot(W1,Z0) + B1
     Y = 1/(1+np.exp(-1*A1))
 
-    # print(Y)
+    #Back Pass
     L = np.empty((0,2),float)
     for i in range(N):
         temp = np.empty(0,float)
@@ -71,8 +72,8 @@ for m in range(3000):
     delta1 = np.multiply(np.dot(W1.T,L),(np.multiply(Z0,(1-Z0))))
     W0 = W0 - LR*np.dot(delta1,DataX)
     b0 = b0 - LR*np.mean(delta1,axis=1)
-
     
+    #Graph Error
     graphX.append(m)
     graphY.append(E)
     if m % 10 == 0:
@@ -85,26 +86,27 @@ for m in range(3000):
         plt.draw()
         plt.pause(.001)
         plt.clf()
+
+plt.figure(2)
+ax = plt.axes(projection='3d')
+
+X1 = np.linspace(-2,2,50)
+X2 = np.linspace(-2,2,50)
+Xgraph, Ygraph = np.meshgrid(X1, X2)
+Z = np.empty((50,50),float)
+
+for i in range(50):
+    for j in range(50):
+        A0 = np.dot((W0.T),np.vstack((Xgraph[i][j],Ygraph[i][j]))) + b0.reshape((2,1))
+        Z0 = 1/(1+np.exp(-1*A0))
+        A1 = np.dot(W1,Z0) + b1.reshape((2,1))
+        Y = 1/(1+np.exp(-1*A1))
+        Z[i][j] = Y[0] - Y[1]
+
+ax.plot_surface(Xgraph, Ygraph, Z, rstride=1, cstride=1,cmap='viridis', edgecolor='none')
+ax.scatter(1,1,-1,color = 'r',s=200,alpha=1)
+ax.scatter(-1,-1,-1,color = 'r',s=200,alpha=1)
+ax.scatter(1,-1,1,color = 'b',s=200,alpha=1)
+ax.scatter(-1,1,1,color = 'b',s=200,alpha=1)
 plt.show()
-print(Y)
-print(E)
-# plt.figure(2)
-# ax = plt.axes(projection='3d')
 
-# X1 = np.linspace(-2,2,1000)
-# X2 = np.linspace(-2,2,1000)
-# Xgraph, Ygraph = np.meshgrid(X1, X2)
-# Z = np.empty((1000,1000),float)
-# for i in range(1000):
-#     for j in range(1000):
-#         A0 = np.dot(W0,np.vstack((Xgraph[i][j],Ygraph[i][j]))) + b0
-#         Z0 = 1/(1+np.exp(-1*A0))
-
-#         A1 = np.dot(W1,Z0) + b1
-#         Y = 1/(1+np.exp(-1*A1))
-#         print(Y)
-#         Z[i][j] = Y[0] - Y[1]
-
-# # print(Y.shape)
-# ax.plot_surface(Xgraph, Ygraph, Y, rstride=1, cstride=1,cmap='viridis', edgecolor='none')
-# plt.show()
