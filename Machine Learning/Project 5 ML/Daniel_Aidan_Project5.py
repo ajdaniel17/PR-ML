@@ -68,7 +68,7 @@ for m in range(3000):
     #Graph Error
     graphX.append(m)
     graphY.append(E)
-    if m % 500 == 0:
+    if m % 50 == 0:
         plt.ion()
         plt.xlabel("Epochs")
         plt.ylabel("Error")
@@ -137,6 +137,7 @@ plt.figure(3)
 plt.title("Epochs vs Error: 3 Units")
 graphX = []
 graphY = []
+prevE = 0
 for m in range(3000):
     #Forward Pass Setup
     
@@ -179,7 +180,7 @@ for m in range(3000):
     #Graph Error
     graphX.append(m)
     graphY.append(E)
-    if m % 500 == 0:
+    if m % 50 == 0:
         plt.ion()
         plt.xlabel("Epochs")
         plt.ylabel("Error")
@@ -188,6 +189,9 @@ for m in range(3000):
         plt.semilogy(graphX,graphY)
         plt.pause(.001)
         plt.clf()
+    if (E < (prevE + .0001) and E > (prevE - .0001)) and E < 3.7:
+        break
+    prevE = E
 plt.ioff()
 plt.figure(3)
 plt.title("Epochs vs Error: 3 Units")
@@ -222,11 +226,12 @@ prevV1 = 0
 prevVb1 = 0
 prevV0 = 0
 prevVb0 = 0
-B = .9
+B = .91
 plt.figure(5)
 plt.title("Epochs vs Error: 20 Units")
 graphX = []
 graphY = []
+prevE = 0
 for m in range(3000):
     #Forward Pass Setup
     
@@ -268,7 +273,7 @@ for m in range(3000):
     #Graph Error
     graphX.append(m)
     graphY.append(E)
-    if m % 500 == 0:
+    if m % 50 == 0:
         plt.ion()
         plt.xlabel("Epochs")
         plt.ylabel("Error")
@@ -277,6 +282,9 @@ for m in range(3000):
         plt.semilogy(graphX,graphY)
         plt.pause(.001)
         plt.clf()
+    if (E < (prevE + .0001) and E > (prevE - .0001)) and E < 2.4:
+        break
+    prevE = E
 plt.ioff()
 plt.figure(5)
 plt.xlabel("Epochs")
